@@ -1,5 +1,6 @@
 <?php
 namespace local_automaticbadges;
+
 defined('MOODLE_INTERNAL') || die();
 
 class observer {
@@ -10,19 +11,51 @@ class observer {
         $courseid = $data['courseid'];
 
         if (!helper::is_enabled_course($courseid)) {
+            debugging('Automatic badges disabled for course ' . $courseid, DEBUG_DEVELOPER);
             return;
         }
 
-        $students = helper::get_students_in_course($courseid);
+        // Leer criterio
+        $criteria = $DB->get_record('local_automaticbadges_criteria', [
+            'courseid' => $courseid,
+            'enabled' => 1
+        ]);
 
-        debugging('Students count: ' . count($students), DEBUG_DEVELOPER);
+        if (!$criteria) {
+            debugging('No criteria configured for course ' . $courseid, DEBUG_DEVELOPER);
+            return;
+        }
 
-        // foreach ($students as $student) {
-        //     require_once($CFG->dirroot . '/badges/lib.php');
-        //     $badgeid = 1;
-        //     $badge = new \badge($badgeid);
-        //     $badge->issue($student->id);
-        //     debugging('Awarded badge to ' . $student->id, DEBUG_DEVELOPER);
-        // }
+        // Leer calificación del usuario afectado
+        $userid = $data['relateduserid'];
+        $itemid = $data['itemid'];
+
+        $grade = $DB->get_record('grade_grades', [
+            'itemid' => $itemid,
+            'userid' => $userid
+        ]);
+
+        if (!$grade || is_null($grade->finalgrade)) {
+            debugging('No grade found for user ' . $userid, DEBUG_DEVELOPER);
+            return;
+        }
+
+        debugging('User ' . $userid . ' grade: ' . $grade->finalgrade, DEBUG_DEVELOPER);
+
+        // Comparar con el criterio
+        if ($grade->finalgrade >= $criteria->grademin) {
+            require_once($CFG->dirroot . '/badges/lib.php');
+
+            $badge = new \badge($criteria->badgeid);
+
+            if (!$badge->is_issued($userid)) {
+                $badge->issue($userid);
+                debugging('Awarded badge ' . $criteria->badgeid . ' to user ' . $userid, DEBUG_DEVELOPER);
+            } else {
+                debugging('Badge already issued to user ' . $userid, DEBUG_DEVELOPER);
+            }
+        } else {
+            debugging('Grade below threshold, no badge awarded.', DEBUG_DEVELOPER);
+        }
     }
 }

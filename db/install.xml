@@ -12,5 +12,22 @@
         <KEY NAME="courseid_fk"  TYPE="foreign"  FIELDS="courseid" REFTABLE="course" REFFIELDS="id" ONDELETE="CASCADE"/>
       </KEYS>
     </TABLE>
+
+<TABLE NAME="local_automaticbadges_criteria" COMMENT="Criterios automáticos por curso para otorgar insignias">
+    <FIELDS>
+        <FIELD NAME="id"         TYPE="int"    LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="courseid"   TYPE="int"    LENGTH="10" NOTNULL="true"/>
+        <FIELD NAME="activityid" TYPE="int"    LENGTH="10" NOTNULL="false"/> <!-- puede ser NULL para criterio global -->
+        <FIELD NAME="grademin"   TYPE="number" LENGTH="10" DECIMALS="2" NOTNULL="true" DEFAULT="0"/> <!-- nota mínima -->
+        <FIELD NAME="badgeid"    TYPE="int"    LENGTH="10" NOTNULL="true"/> <!-- insignia a otorgar -->
+        <FIELD NAME="enabled"    TYPE="int"    LENGTH="1"  NOTNULL="true" DEFAULT="1"/> <!-- activo o no -->
+        <FIELD NAME="timemodified" TYPE="int"  LENGTH="10" NOTNULL="true"/> <!-- timestamp -->
+    </FIELDS>
+    <KEYS>
+        <KEY NAME="primary"       TYPE="primary"  FIELDS="id"/>
+        <KEY NAME="courseid_fk"   TYPE="foreign"  FIELDS="courseid" REFTABLE="course" REFFIELDS="id" ONDELETE="CASCADE"/>
+        <KEY NAME="badgeid_fk"    TYPE="foreign"  FIELDS="badgeid"  REFTABLE="badge"  REFFIELDS="id" ONDELETE="CASCADE"/>
+    </KEYS>
+</TABLE>
   </TABLES>
 </XMLDB>

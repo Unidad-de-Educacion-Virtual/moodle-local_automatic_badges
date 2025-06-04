@@ -1,4 +1,11 @@
 <?php
-defined('MOODLE_INTERNAL') || die();
-
-$capabilities = array();
+$capabilities = [
+    'local/automaticbadges:manage' => [
+        'captype' => 'write',
+        'contextlevel' => CONTEXT_COURSE,
+        'archetypes' => [
+            'manager' => CAP_ALLOW,
+            'editingteacher' => CAP_ALLOW,
+        ]
+    ],
+];

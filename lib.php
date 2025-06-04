@@ -48,4 +48,17 @@ function local_automaticbadges_extend_navigation_course(navigation_node $parentn
         new pix_icon('i/report', '')
     );
     $node->add_node($subnode2);
+
+    $urlcriteria = new moodle_url('/local/automaticbadges/course_criteria.php', ['id' => $course->id]);
+$subnode3 = navigation_node::create(
+    get_string('coursenode_subcriteria', 'local_automaticbadges'),
+    $urlcriteria,
+    navigation_node::TYPE_CUSTOM,
+    null,
+    'automaticbadges_criteria',
+    new pix_icon('i/settings', '')
+);
+$node->add_node($subnode3);
+
+
 }

@@ -9,3 +9,5 @@ $string['defaultbadgetypedesc'] = 'Clave interna del tipo de insignia que se asi
 $string['coursenode_title']      = 'Automatic Badges';
 $string['coursenode_subhistory'] = 'Badge History';
 $string['coursenode_subconfig']  = 'Badge Settings';
+$string['coursenode_subcriteria'] = 'Criterios Globales';
+$string['automaticbadges:manage'] = 'Manage automatic badges settings';

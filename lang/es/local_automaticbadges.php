@@ -8,3 +8,5 @@ $string['defaultbadgetype'] = 'Tipo de insignia por defecto';
 $string['defaultbadgetypedesc'] = 'Clave interna del tipo de insignia que se asignará si no hay otro criterio.';
 $string['coursenode_title']      = 'Insignias Automáticas';
 $string['coursenode_subhistory'] = 'Historial de Insignias';
+$string['coursenode_subcriteria'] = 'Criterios Globales';
+$string['automaticbadges:manage'] = 'Gestionar configuración de Insignias Automáticas';
