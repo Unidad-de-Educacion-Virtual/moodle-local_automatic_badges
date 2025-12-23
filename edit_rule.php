@@ -31,6 +31,7 @@ echo $OUTPUT->heading(get_string('editrule', 'local_automatic_badges'), 2);
 $mform = new local_automatic_badges_add_rule_form(null, [
     'courseid' => $course->id,
     'ruleid' => $ruleid,
+    'criterion_type' => $rule->criterion_type,
 ]);
 
 if ($mform->is_cancelled()) {
