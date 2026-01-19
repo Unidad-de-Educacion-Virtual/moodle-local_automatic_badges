@@ -72,6 +72,7 @@ $string['rulebadgeactivated'] = 'Changes saved. The badge "{$a}" has been activa
 $string['rulebadgealreadyactive'] = 'Changes saved. The badge "{$a}" was already active and ready to be awarded.';
 $string['ruledisabledsaved'] = 'Changes saved. The rule remains disabled until you enable it.';
 $string['nobadgesavailable'] = 'There are no active badges available in this course.';
+$string['nobadges_createfirst'] = 'You need to create at least one badge before you can set up automatic rules. Click the button below to create your first badge.';
 $string['norulesyet'] = 'No rules configured for this course yet.';
 $string['rulestatus'] = 'Rule status';
 $string['badgestatus'] = 'Badge status';
@@ -135,3 +136,79 @@ $string['awardbadgestask'] = 'Automatic badges awarding task';
 // Misc.
 $string['editfrommenu'] = 'Edit badge from custom menu';
 $string['historyplaceholder'] = 'Badge history will be displayed here.';
+
+// Tabs navigation.
+$string['tab_rules'] = 'Automatic Rules';
+$string['tab_badges'] = 'Course Badges';
+$string['tab_templates'] = 'Rule Templates';
+$string['tab_history'] = 'History & Reports';
+$string['tab_settings'] = 'Configuration';
+
+// Templates.
+$string['templates_title'] = 'Preconfigured Rule Templates';
+$string['templates_description'] = 'Use these templates to quickly create rules. Select a template and customize it as needed.';
+$string['usetemplatebutton'] = 'Use this template';
+$string['template_excellence'] = 'Academic Excellence';
+$string['template_excellence_desc'] = 'Award badge when student achieves 90% or higher in an activity.';
+$string['template_participant'] = 'Active Participant';
+$string['template_participant_desc'] = 'Award badge when student makes 5 or more posts in a forum.';
+$string['template_submission'] = 'On-time Submission';
+$string['template_submission_desc'] = 'Award badge when student submits an assignment before the deadline.';
+$string['template_perfect'] = 'Perfect Score';
+$string['template_perfect_desc'] = 'Award badge when student achieves 100% in an activity.';
+$string['template_debater'] = 'Discussion Starter';
+$string['template_debater_desc'] = 'Award badge when student creates 3 or more discussion topics.';
+
+// History and reports.
+$string['history_title'] = 'Badge Award History';
+$string['history_nologs'] = 'No badge awards have been recorded yet.';
+$string['history_user'] = 'User';
+$string['history_badge'] = 'Badge';
+$string['history_rule'] = 'Rule';
+$string['history_date'] = 'Date Awarded';
+$string['history_activity'] = 'Related Activity';
+$string['history_bonus'] = 'Bonus Applied';
+$string['exportcsv'] = 'Export to CSV';
+$string['exportxlsx'] = 'Export to Excel';
+$string['filterbydate'] = 'Filter by date';
+$string['filterbybadge'] = 'Filter by badge';
+$string['filterbyuser'] = 'Filter by user';
+
+// Statistics.
+$string['stats_title'] = 'Quick Statistics';
+$string['stats_total_awarded'] = 'Total Badges Awarded';
+$string['stats_unique_users'] = 'Unique Users';
+$string['stats_most_popular'] = 'Most Popular Badge';
+$string['stats_conversion_rate'] = 'Average Conversion Rate';
+
+// Course settings tab.
+$string['coursesettings_title'] = 'Course Configuration';
+$string['coursesettings_enabled'] = 'Enable automatic badges for this course';
+$string['coursesettings_enabled_desc'] = 'When disabled, no rules will be evaluated for this course.';
+$string['coursesettings_default_notify'] = 'Default notification message';
+$string['coursesettings_default_notify_desc'] = 'This message is sent when a rule does not define a custom notification.';
+$string['coursesettings_email_notify'] = 'Send email notifications';
+$string['coursesettings_email_notify_desc'] = 'Notify users via email when they earn a badge.';
+$string['coursesettings_show_profile'] = 'Show badges in user profile';
+$string['coursesettings_show_profile_desc'] = 'Display earned badges in the user profile within this course.';
+$string['settings_saved'] = 'Settings saved successfully.';
+
+// Manual badge award.
+$string['awardmanually'] = 'Award manually';
+$string['selectuserstobadge'] = 'Select users to receive this badge';
+$string['manualaward_success'] = 'Badge awarded successfully to {$a} user(s).';
+
+// Badge management.
+$string['duplicatebadge'] = 'Duplicate badge';
+$string['deletebadge'] = 'Delete badge';
+$string['viewrecipients'] = 'View recipients';
+$string['recipients_title'] = 'Badge Recipients';
+$string['recipients_none'] = 'No users have earned this badge yet.';
+
+// Rule actions.
+$string['duplicaterule'] = 'Duplicate rule';
+$string['deleterule'] = 'Delete rule';
+$string['deleterule_confirm'] = 'Are you sure you want to delete this rule? This action cannot be undone.';
+$string['ruledeleted'] = 'Rule deleted successfully.';
+$string['ruleduplicated'] = 'Rule duplicated successfully.';
+

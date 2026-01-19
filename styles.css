@@ -1,4 +1,9 @@
-/* Contenedor principal para márgenes consistentes */
+/* ============================================
+   AUTOMATIC BADGES PLUGIN - THEME COMPATIBLE CSS
+   Uses Moodle/Bootstrap classes for theme compatibility
+   ============================================ */
+
+/* Contenedor principal */
 .automatic-badges-container {
     margin: 1.5rem;
     padding: 0 1rem;
@@ -7,12 +12,11 @@
     margin-right: auto;
 }
 
-/* Alineación de botones de acción */
+/* Alineación de botones */
 .automatic-badges-container .fitem .felement {
     text-align: left;
 }
 
-/* Alineación de botones en el formulario */
 .automatic-badges-container .mform .fcontainer .fbuttons {
     display: flex;
     gap: 0.5rem;
@@ -69,15 +73,294 @@
 .local-automatic-badges-wrapper .collapsible-badges .collapse {
     margin-top: 1rem;
 }
+
 .local-automatic-badges-actioncell {
     display: flex;
     align-items: center;
     gap: 0.5rem;
 }
+
 .local-automatic-badges-actioncell__edit .btn,
 .local-automatic-badges-toggleform .btn {
     margin-bottom: 0;
 }
+
 .local-automatic-badges-toggleform {
     display: inline-block;
+}
+
+/* ============================================
+   TAB NAVIGATION - Uses Bootstrap nav classes
+   ============================================ */
+
+/* Moodle tabtree styling - inherits from theme */
+.local-automatic-badges-wrapper .tabtree {
+    margin-bottom: 0;
+}
+
+.local-automatic-badges-wrapper .tabtree .nav-tabs {
+    border-bottom: 2px solid var(--gray-light, #dee2e6);
+}
+
+/* Tab links with Font Awesome icons */
+.local-automatic-badges-wrapper .tabtree .nav-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.25rem;
+    font-weight: 500;
+    border-radius: 0;
+    border: none;
+    border-bottom: 3px solid transparent;
+    background: transparent;
+    color: var(--gray-dark, #495057);
+    transition: color 0.15s ease-in-out, border-color 0.15s ease-in-out;
+}
+
+.local-automatic-badges-wrapper .tabtree .nav-link:hover,
+.local-automatic-badges-wrapper .tabtree .nav-link:focus {
+    color: var(--primary, #0f6cbf);
+    border-bottom-color: rgba(15, 108, 191, 0.3);
+    background-color: var(--gray-100, #f8f9fa);
+}
+
+.local-automatic-badges-wrapper .tabtree .nav-link.active,
+.local-automatic-badges-wrapper .tabtree .nav-link.here {
+    color: var(--primary, #0f6cbf);
+    border-bottom-color: var(--primary, #0f6cbf);
+    background: transparent;
+    font-weight: 600;
+}
+
+.local-automatic-badges-wrapper .tabtree .nav-link i,
+.local-automatic-badges-wrapper .tabtree .nav-link .fa {
+    font-size: 1rem;
+    opacity: 0.85;
+}
+
+.local-automatic-badges-tab-content {
+    padding: 1.5rem 0;
+}
+
+/* ============================================
+   TEMPLATE CARDS - Bootstrap card compatible
+   ============================================ */
+
+.template-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+
+.template-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.1);
+}
+
+.template-card .card-body {
+    padding: 1.5rem;
+}
+
+.template-card .template-icon {
+    font-size: 2.5rem;
+    margin-bottom: 0.75rem;
+    line-height: 1;
+}
+
+.template-card .card-title {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.template-card .card-text {
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: var(--gray, #6c757d);
+}
+
+.template-card .card-footer {
+    background-color: transparent;
+    border-top: none;
+    padding: 1rem 1.5rem;
+}
+
+/* ============================================
+   STAT CARDS - Uses CSS variables for theming
+   ============================================ */
+
+.stat-card {
+    padding: 1.25rem;
+    border-radius: 0.5rem;
+    background: var(--white, #ffffff);
+    border: 1px solid var(--gray-200, #e9ecef);
+    border-left: 4px solid var(--primary, #0f6cbf);
+    transition: box-shadow 0.2s ease;
+}
+
+.stat-card:hover {
+    box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.08);
+}
+
+.stat-card .stat-label {
+    font-size: 0.85rem;
+    color: var(--gray, #6c757d);
+    margin-bottom: 0.5rem;
+}
+
+.stat-card .stat-label .fa {
+    margin-right: 0.25rem;
+}
+
+.stat-card .stat-value {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--gray-dark, #343a40);
+    margin-bottom: 0;
+}
+
+/* ============================================
+   BUTTON GROUPS & ACTIONS
+   ============================================ */
+
+.local-automatic-badges-wrapper .btn-group .btn {
+    padding: 0.375rem 0.625rem;
+}
+
+.local-automatic-badges-wrapper .btn-group .btn .fa {
+    font-size: 0.875rem;
+}
+
+/* Ensure proper spacing in table action cells */
+.local-automatic-badges-table .btn-group {
+    flex-wrap: nowrap;
+}
+
+/* ============================================
+   STATUS BADGES - Bootstrap badge classes
+   Uses standard Bootstrap classes:
+   .badge, .badge-success, .badge-secondary, etc.
+   ============================================ */
+
+/* These use Moodle's built-in badge styles */
+
+/* ============================================
+   FORM ELEMENTS - Theme compatible
+   ============================================ */
+
+/* Custom switch styling - inherits from Bootstrap/Moodle */
+.local-automatic-badges-wrapper .form-check.form-switch {
+    padding-left: 2.5rem;
+}
+
+/* ============================================
+   TABLE IMPROVEMENTS
+   ============================================ */
+
+.local-automatic-badges-table tbody tr {
+    transition: background-color 0.15s ease;
+}
+
+.local-automatic-badges-table tbody tr:hover {
+    background-color: var(--gray-100, #f8f9fa);
+}
+
+.local-automatic-badges-table td {
+    vertical-align: middle;
+}
+
+.local-automatic-badges-table td img {
+    border-radius: 0.25rem;
+}
+
+/* ============================================
+   ALERTS & NOTIFICATIONS
+   Uses Moodle's built-in alert classes
+   ============================================ */
+
+/* These inherit from theme's .alert classes */
+
+/* ============================================
+   RESPONSIVE ADJUSTMENTS
+   ============================================ */
+
+@media (max-width: 991.98px) {
+    .local-automatic-badges-wrapper .tabtree .nav-link {
+        padding: 0.625rem 1rem;
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .local-automatic-badges-wrapper .tabtree .nav-tabs {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .local-automatic-badges-wrapper .tabtree .nav-link {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.85rem;
+        white-space: nowrap;
+    }
+
+    /* Hide text, show only icons on small screens */
+    .local-automatic-badges-wrapper .tabtree .nav-link .tab-text {
+        display: none;
+    }
+
+    .template-card .card-body {
+        padding: 1rem;
+    }
+
+    .stat-card {
+        padding: 1rem;
+    }
+
+    .stat-card .stat-value {
+        font-size: 1.5rem;
+    }
+
+    /* Stack action buttons on mobile */
+    .local-automatic-badges-table .btn-group {
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+
+    .local-automatic-badges-table .btn-group .btn {
+        width: 100%;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .local-automatic-badges-wrapper .tabtree .nav-link {
+        padding: 0.5rem;
+    }
+}
+
+/* ============================================
+   DARK MODE SUPPORT (if theme supports it)
+   ============================================ */
+
+@media (prefers-color-scheme: dark) {
+    .stat-card {
+        background: var(--gray-800, #343a40);
+        border-color: var(--gray-700, #495057);
+    }
+
+    .template-card {
+        background: var(--gray-800, #343a40);
+    }
+}
+
+/* Boost theme dark mode class */
+body.theme-dark .stat-card,
+body.dark-mode .stat-card {
+    background: var(--gray-800, #343a40);
+    border-color: var(--gray-700, #495057);
+}
+
+body.theme-dark .template-card,
+body.dark-mode .template-card {
+    background: var(--gray-800, #343a40);
+    border-color: var(--gray-700, #495057);
 }

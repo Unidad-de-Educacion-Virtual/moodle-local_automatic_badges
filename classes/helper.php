@@ -76,4 +76,51 @@ class helper {
         
         return $DB->get_records_sql($sql, $params);
     }
+
+    /**
+     * Get eligible activities for a specific criterion type.
+     *
+     * @param int $courseid
+     * @param string $criterion 'grade', 'forum', or 'submission'
+     * @return array<int,string> Array of cmid => activity name
+     */
+    public static function get_eligible_activities(int $courseid, string $criterion = ''): array {
+        $modinfo = get_fast_modinfo($courseid);
+        $activities = [];
+        
+        foreach ($modinfo->get_cms() as $cm) {
+            if (!$cm->uservisible) {
+                continue;
+            }
+            if (!self::is_activity_eligible($cm, $criterion)) {
+                continue;
+            }
+            $activities[$cm->id] = $cm->get_formatted_name();
+        }
+        
+        return $activities;
+    }
+
+    /**
+     * Check if an activity is eligible for a specific criterion.
+     *
+     * @param \cm_info $cm
+     * @param string $criterion 'grade', 'forum', or 'submission'
+     * @return bool
+     */
+    public static function is_activity_eligible(\cm_info $cm, string $criterion = ''): bool {
+        switch ($criterion) {
+            case 'forum':
+                return $cm->modname === 'forum';
+            case 'submission':
+                return in_array($cm->modname, ['assign', 'workshop'], true);
+            case 'grade':
+                return plugin_supports('mod', $cm->modname, FEATURE_GRADE_HAS_GRADE);
+            default:
+                // If no criterion specified, check if supports grades or completion
+                $supportsgrades = plugin_supports('mod', $cm->modname, FEATURE_GRADE_HAS_GRADE);
+                $supportscompletion = plugin_supports('mod', $cm->modname, FEATURE_COMPLETION_HAS_RULES);
+                return !empty($supportsgrades) || !empty($supportscompletion);
+        }
+    }
 }

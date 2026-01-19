@@ -97,5 +97,39 @@ function xmldb_local_automatic_badges_upgrade(int $oldversion): bool {
         upgrade_plugin_savepoint(true, 2026011301, 'local', 'automatic_badges');
     }
 
+    // Upgrade para agregar tablas faltantes: coursecfg y criteria
+    if ($oldversion < 2026011702) {
+        // Tabla coursecfg
+        $table = new xmldb_table('local_automatic_badges_coursecfg');
+        if (!$dbman->table_exists($table)) {
+            $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
+            $table->add_field('courseid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+            $table->add_field('enabled', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '0');
+            $table->add_field('timecreated', XMLDB_TYPE_INTEGER, '10', null, null, null, null);
+            $table->add_field('timemodified', XMLDB_TYPE_INTEGER, '10', null, null, null, null);
+            $table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
+            $table->add_index('courseid_idx', XMLDB_INDEX_UNIQUE, ['courseid']);
+            $dbman->create_table($table);
+        }
+
+        // Tabla criteria (legacy)
+        $table = new xmldb_table('local_automatic_badges_criteria');
+        if (!$dbman->table_exists($table)) {
+            $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
+            $table->add_field('courseid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+            $table->add_field('badgeid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+            $table->add_field('grademin', XMLDB_TYPE_NUMBER, '10,2', null, null, null, null);
+            $table->add_field('enabled', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '1');
+            $table->add_field('timecreated', XMLDB_TYPE_INTEGER, '10', null, null, null, null);
+            $table->add_field('timemodified', XMLDB_TYPE_INTEGER, '10', null, null, null, null);
+            $table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
+            $table->add_index('courseid_idx', XMLDB_INDEX_NOTUNIQUE, ['courseid']);
+            $table->add_index('badgeid_idx', XMLDB_INDEX_NOTUNIQUE, ['badgeid']);
+            $dbman->create_table($table);
+        }
+
+        upgrade_plugin_savepoint(true, 2026011702, 'local', 'automatic_badges');
+    }
+
     return true;
 }

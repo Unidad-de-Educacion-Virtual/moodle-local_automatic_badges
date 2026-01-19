@@ -2,7 +2,7 @@
 // local/automatic_badges/index.php
 
 // === Dependencias y capacidades ===
-require('../../config.php');
+require(__DIR__ . '/../../config.php');
 require_login();
 
 $context = context_system::instance();

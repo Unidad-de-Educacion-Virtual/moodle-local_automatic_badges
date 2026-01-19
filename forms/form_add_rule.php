@@ -50,9 +50,9 @@ class local_automatic_badges_add_rule_form extends moodleform {
         // Selector anidado segun el criterio.
         $mform->addElement('html', '<div id="local_automatic_badges_activity_container">');
         $criteriaactivities = [
-            'grade' => $this->get_eligible_activities($courseid, 'grade'),
-            'forum' => $this->get_eligible_activities($courseid, 'forum'),
-            'submission' => $this->get_eligible_activities($courseid, 'submission'),
+            'grade' => \local_automatic_badges\helper::get_eligible_activities($courseid, 'grade'),
+            'forum' => \local_automatic_badges\helper::get_eligible_activities($courseid, 'forum'),
+            'submission' => \local_automatic_badges\helper::get_eligible_activities($courseid, 'submission'),
         ];
         $this->eligibleactivities = $criteriaactivities[$criterion] ?? [];
         $mform->addElement('select', 'activityid',
@@ -134,8 +134,24 @@ class local_automatic_badges_add_rule_form extends moodleform {
         }
 
         if (empty($badgeoptions)) {
-            $mform->addElement('static', 'nobadges', '',
-                get_string('nobadgesavailable', 'local_automatic_badges'));
+            // Mostrar alerta prominente cuando no hay insignias
+            $createbadgeurl = new moodle_url('/badges/newbadge.php', ['type' => BADGE_TYPE_COURSE, 'id' => $courseid]);
+            $alerthtml = '
+            <div class="alert alert-warning d-flex align-items-start" role="alert" style="margin: 1rem 0; padding: 1rem 1.25rem; border-left: 4px solid #ffc107;">
+                <i class="fa fa-exclamation-triangle fa-2x mr-3" style="color: #856404;"></i>
+                <div>
+                    <h5 class="alert-heading mb-2" style="font-weight: 600; color: #856404;">' . 
+                        get_string('nobadgesavailable', 'local_automatic_badges') . '
+                    </h5>
+                    <p class="mb-2" style="color: #856404;">
+                        ' . get_string('nobadges_createfirst', 'local_automatic_badges') . '
+                    </p>
+                    <a href="' . $createbadgeurl->out() . '" class="btn btn-warning btn-sm">
+                        <i class="fa fa-plus mr-1"></i> ' . get_string('newbadge', 'badges') . '
+                    </a>
+                </div>
+            </div>';
+            $mform->addElement('html', $alerthtml);
         } else {
             $mform->addElement('select', 'badgeid',
                 get_string('selectbadge', 'local_automatic_badges'), $badgeoptions);
@@ -417,68 +433,11 @@ JS
 );
     }
 
-    // === Helpers de actividades ===
-
-    /**
-     * Obtiene las actividades del curso elegibles para reglas de insignias.
-     *
-     * @param int $courseid
-     * @param string|null $criterion
-     * @return array<int,string>
-     */
-    protected function get_eligible_activities(int $courseid, ?string $criterion = null): array {
-        $modinfo = get_fast_modinfo($courseid);
-        $activities = [];
-        $criterion = $criterion ?? '';
-        foreach ($modinfo->get_cms() as $cm) {
-            if (!$cm->uservisible) {
-                continue;
-            }
-
-            if (!$this->is_activity_eligible($cm, $criterion)) {
-                continue;
-            }
-            $activities[$cm->id] = $cm->get_formatted_name();
-        }
-        return $activities;
-    }
-
-    /**
-     * Determina si una actividad es valida para otorgar insignias automaticas.
-     *
-     * @param \cm_info $cm
-     * @param string $criterion
-     * @return bool
-     */
-    protected function is_activity_eligible(\cm_info $cm, string $criterion = ''): bool {
-        switch ($criterion) {
-            case 'forum':
-                return $cm->modname === 'forum';
-            case 'submission':
-                return in_array($cm->modname, ['assign', 'workshop'], true);
-            case 'grade':
-                return plugin_supports('mod', $cm->modname, FEATURE_GRADE_HAS_GRADE);
-        }
-
-        $supportsgrades = plugin_supports('mod', $cm->modname, FEATURE_GRADE_HAS_GRADE);
-        $supportssubmission = plugin_supports('mod', $cm->modname, FEATURE_COMPLETION_HAS_RULES);
-        return !empty($supportsgrades) || !empty($supportssubmission);
-    }
-
-    // === Validaciones personalizadas ===
-
-    /**
-     * Validacion personalizada del formulario.
-     *
-     * @param array $data
-     * @param array $files
-     * @return array
-     */
     public function validation($data, $files) {
         $errors = parent::validation($data, $files);
         $courseid = isset($data['courseid']) ? (int)$data['courseid'] : 0;
         $criterion = $data['criterion_type'] ?? 'grade';
-        $this->eligibleactivities = $this->get_eligible_activities($courseid, $criterion);
+        $this->eligibleactivities = \local_automatic_badges\helper::get_eligible_activities($courseid, $criterion);
         $activityid = isset($data['activityid']) ? (int)$data['activityid'] : 0;
         if (empty($this->eligibleactivities)) {
             $errors['activityid'] = get_string('noeligibleactivities', 'local_automatic_badges');
@@ -496,4 +455,3 @@ JS
         return $errors;
     }
 }
-
