@@ -85,10 +85,6 @@ $string['globallimit_all'] = 'Todas las actividades disponibles';
 $string['globallimit_first'] = 'Primeras {$a} actividades';
 $string['globalrule_summary'] = 'Generadas {$a->rules} reglas y {$a->badges} insignias para {$a->type}.';
 $string['isglobalrule_help'] = 'Si está habilitado, esta regla se aplicará a todas las actividades del tipo seleccionado en el curso, en lugar de una sola actividad específica.';
-$string['activitytype'] = 'Tipo de actividad';
-$string['activitytype_help'] = 'Selecciona el tipo de actividad al que se aplicará esta regla global (tareas, cuestionarios, foros, etc).';
-$string['forumpostcount'] = 'Publicaciones necesarias en el foro';
-$string['forumpostcount_help'] = 'Indica cuántas publicaciones debe realizar el participante en el foro seleccionado para otorgar la insignia.';
 $string['forumpostcounterror'] = 'Ingresa un número positivo de publicaciones requeridas.';
 $string['forumpostcount_all'] = 'Publicaciones necesarias (temas o respuestas)';
 $string['forumpostcount_all_help'] = 'Indica cuántas publicaciones en total (temas + respuestas) debe realizar el participante en el foro seleccionado para otorgar la insignia.';
@@ -246,3 +242,16 @@ $string['selectactivities'] = 'Seleccionar actividades';
 $string['selecttypefirst'] = 'Primero selecciona un tipo de actividad';
 $string['error_noactivitiesselected'] = 'No seleccionaste ninguna actividad para generar insignias.';
 $string['selectall'] = 'Seleccionar todas';
+
+// Formulario de regla global.
+$string['addglobalrule'] = 'Crear regla global';
+$string['globalrule_section_type'] = 'Tipo de actividad y criterio';
+$string['globalrule_info_title'] = 'Regla global';
+$string['globalrule_info_body'] = 'Una regla global crea automáticamente una regla de insignia por cada actividad del tipo seleccionado. La insignia plantilla se clona para cada actividad.';
+$string['globalrule_badge_hint'] = 'Esta insignia se usará como plantilla. Se creará una copia para cada actividad seleccionada, con el nombre "[Insignia] - [Actividad]".';
+$string['globalrule_submit'] = 'Generar insignias';
+$string['advancedoptions'] = 'Opciones avanzadas';
+
+// Formulario de regla individual.
+$string['individualrule_info_title'] = 'Regla individual';
+$string['individualrule_info_body'] = 'Una regla individual vincula una insignia a una actividad específica. La insignia se otorga automáticamente cuando el estudiante cumple el criterio configurado.';

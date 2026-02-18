@@ -30,6 +30,13 @@ $perpage = optional_param('perpage', $defaultperpage, PARAM_INT);
 $sort    = optional_param('sort', 'name', PARAM_ALPHAEXT);
 $dir     = optional_param('dir', 'ASC', PARAM_ALPHA);
 
+// === Configuracion de la pagina ===
+$PAGE->set_url(new moodle_url('/local/automatic_badges/course_settings.php', ['id' => $courseid, 'tab' => $currenttab]));
+$PAGE->set_context($context);
+$PAGE->set_pagelayout('course');
+$PAGE->set_title(get_string('coursenode_title', 'local_automatic_badges'));
+$PAGE->set_heading(format_string($course->fullname));
+
 // === Procesar acciones de reglas ===
 if (!empty($ruleaction)) {
     require_sesskey();
@@ -75,15 +82,9 @@ if (!empty($ruleaction)) {
         $type = \core\output\notification::NOTIFY_SUCCESS;
     }
 
-    redirect(new moodle_url($PAGE->url, ['tab' => 'rules']), $message, 2, $type);
+    redirect(new moodle_url($PAGE->url, ['tab' => 'rules']), $message, 0, $type);
 }
 
-// === Configuracion de la pagina ===
-$PAGE->set_url(new moodle_url('/local/automatic_badges/course_settings.php', ['id' => $courseid, 'tab' => $currenttab]));
-$PAGE->set_context($context);
-$PAGE->set_pagelayout('course');
-$PAGE->set_title(get_string('coursenode_title', 'local_automatic_badges'));
-$PAGE->set_heading(format_string($course->fullname));
 
 // === Encabezado ===
 echo $OUTPUT->header();
@@ -145,11 +146,27 @@ echo $OUTPUT->footer();
  * Render the Rules tab content.
  */
 function render_rules_tab($courseid, $OUTPUT, $PAGE, $DB, $page, $perpage, $sort, $dir) {
-    // Add new rule button
+    // Add rule buttons: individual and global
     $addruleurl = new moodle_url('/local/automatic_badges/add_rule.php', ['id' => $courseid]);
+    $addglobalruleurl = new moodle_url('/local/automatic_badges/add_global_rule.php', ['id' => $courseid]);
+
+    $btnindividual = html_writer::link(
+        $addruleurl,
+        html_writer::tag('i', '', ['class' => 'fa fa-plus mr-2']) .
+        get_string('addnewrule', 'local_automatic_badges'),
+        ['class' => 'btn btn-primary']
+    );
+
+    $btnglobal = html_writer::link(
+        $addglobalruleurl,
+        html_writer::tag('i', '', ['class' => 'fa fa-globe mr-2']) .
+        get_string('addglobalrule', 'local_automatic_badges'),
+        ['class' => 'btn btn-outline-primary ml-2']
+    );
+
     echo html_writer::div(
-        $OUTPUT->single_button($addruleurl, get_string('addnewrule', 'local_automatic_badges'), 'get'),
-        'local-automatic-badges-actions mb-3'
+        $btnindividual . $btnglobal,
+        'local-automatic-badges-actions mb-3 d-flex align-items-center'
     );
 
     // Get rules

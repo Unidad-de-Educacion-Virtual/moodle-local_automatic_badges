@@ -204,30 +204,64 @@ class helper {
         require_once($CFG->libdir . '/badgeslib.php');
 
         $basebadge = $DB->get_record('badge', ['id' => $basebadgeid], '*', MUST_EXIST);
-        $newbadge = clone($basebadge);
-        unset($newbadge->id);
-        $newbadge->name = $newname;
-        $newbadge->timecreated = time();
-        $newbadge->timemodified = time();
-        $newbadge->usercreated = $USER->id;
-        $newbadge->usermodified = $USER->id;
-        $newbadge->status = BADGE_STATUS_INACTIVE;
-        
+
+        // Only copy columns that exist in mdl_badge to avoid DB errors
+        $newbadge = new \stdClass();
+        $newbadge->name          = $newname;
+        $newbadge->description   = $basebadge->description ?? '';
+        $newbadge->timecreated   = time();
+        $newbadge->timemodified  = time();
+        $newbadge->usercreated   = $USER->id;
+        $newbadge->usermodified  = $USER->id;
+        $newbadge->issuername    = $basebadge->issuername ?? '';
+        $newbadge->issuerurl     = $basebadge->issuerurl ?? '';
+        $newbadge->issuercontact = $basebadge->issuercontact ?? '';
+        $newbadge->expiredate    = $basebadge->expiredate ?? null;
+        $newbadge->expireperiod  = $basebadge->expireperiod ?? null;
+        $newbadge->type          = BADGE_TYPE_COURSE;
+        $newbadge->courseid      = $courseid;
+        $newbadge->messagesubject = $basebadge->messagesubject ?? '';
+        $newbadge->message       = $basebadge->message ?? '';
+        $newbadge->attachment    = $basebadge->attachment ?? 1;
+        $newbadge->notification  = $basebadge->notification ?? 0;
+        $newbadge->status        = BADGE_STATUS_INACTIVE;
+        $newbadge->nextcron      = null;
+
         // Insert new badge record
-        $newid = $DB->insert_record('badge', $newbadge);
-        
+        try {
+            $newid = $DB->insert_record('badge', $newbadge);
+        } catch (\Exception $e) {
+            // Log the actual error so it's visible
+            file_put_contents(__DIR__ . '/../../debug_clone_error.txt',
+                "clone_badge ERROR: " . $e->getMessage() . "\n" .
+                "basebadgeid=$basebadgeid courseid=$courseid newname=$newname\n" .
+                "newbadge: " . var_export($newbadge, true) . "\n"
+            );
+            throw $e; // re-throw so caller knows it failed
+        }
+
         // Copy Badge Image
-        // Badges use context_course or context_system. Assuming course badges.
-        $context = \context_course::instance($courseid);
+        $badgeobj = new \badge($basebadgeid);
+        $badgecontext = $badgeobj->get_context();
+        $targetcontext = \context_course::instance($courseid);
         $fs = get_file_storage();
-        
-        // Try to find the image file in the 'badges' component, 'badgeimage' area, itemid = basebadgeid
-        $files = $fs->get_area_files($context->id, 'badges', 'badgeimage', $basebadgeid, 'sortorder', false);
-        if ($file = reset($files)) {
-            $fs->create_file_from_storedfile(['itemid' => $newid], $file);
-        } else {
-            // Fallback: if it's a site badge or other context? 
-            // For now assume course context as per requirement.
+
+        // Find the image file in the source badge context
+        $files = $fs->get_area_files($badgecontext->id, 'badges', 'badgeimage', $basebadgeid, 'sortorder', false);
+        foreach ($files as $file) {
+            if ($file->is_directory()) {
+                continue;
+            }
+            try {
+                $fs->create_file_from_storedfile([
+                    'contextid' => $targetcontext->id,
+                    'itemid'    => $newid
+                ], $file);
+            } catch (\Exception $e) {
+                // Image copy failed — not critical, continue
+                file_put_contents(__DIR__ . '/../../debug_clone_error.txt',
+                    "clone_badge IMAGE ERROR: " . $e->getMessage() . "\n", FILE_APPEND);
+            }
         }
 
         return $newid;

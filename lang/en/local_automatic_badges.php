@@ -84,10 +84,6 @@ $string['globallimit'] = 'Activities to process';
 $string['globallimit_all'] = 'All available activities';
 $string['globallimit_first'] = 'First {$a} activities';
 $string['globalrule_summary'] = 'Generated {$a->rules} rules and {$a->badges} badges for {$a->type}.';
-$string['isglobalrule'] = 'Generate rules for all matching activities (Global Generator)';
-$string['isglobalrule_help'] = 'When enabled, this rule will be applied to all activities of the selected type in the course, instead of a single specific activity.';
-$string['activitytype'] = 'Activity type';
-$string['activitytype_help'] = 'Select the type of activity to which this global rule will be applied (assignments, quizzes, forums, etc).';
 $string['forumpostcount'] = 'Required forum posts';
 $string['forumpostcount_help'] = 'Enter how many posts a participant must make in the selected forum before issuing the badge.';
 $string['forumpostcounterror'] = 'Enter a positive number of required forum posts.';
@@ -245,3 +241,15 @@ $string['selecttypefirst'] = 'First select an activity type';
 $string['error_noactivitiesselected'] = 'No activities were selected for badge generation.';
 $string['selectall'] = 'Select all';
 
+// Global rule form.
+$string['addglobalrule'] = 'Create global rule';
+$string['globalrule_section_type'] = 'Activity type and criterion';
+$string['globalrule_info_title'] = 'Global rule';
+$string['globalrule_info_body'] = 'A global rule automatically creates one badge rule for each activity of the selected type. The template badge will be cloned for each activity.';
+$string['globalrule_badge_hint'] = 'This badge will be used as a template. A copy will be created for each selected activity, named "[Badge] - [Activity]".';
+$string['globalrule_submit'] = 'Generate badges';
+$string['advancedoptions'] = 'Advanced options';
+
+// Individual rule form.
+$string['individualrule_info_title'] = 'Individual rule';
+$string['individualrule_info_body'] = 'An individual rule links one badge to a specific activity. The badge is awarded automatically when the student meets the configured criterion.';

@@ -3,7 +3,7 @@
 
 // === Dependencias principales ===
 require(__DIR__ . '/../../../config.php');
-require_once($CFG->dirroot . '/badges/lib.php');
+require_once($CFG->dirroot . '/lib/badgeslib.php');
 require_once($CFG->dirroot . '/local/automatic_badges/forms/form_add_rule.php');
 
 use local_automatic_badges\rule_manager;
@@ -28,17 +28,12 @@ require_capability('moodle/badges:configurecriteria', $context);
 $PAGE->set_url(new moodle_url('/local/automatic_badges/add_rule.php', ['id' => $courseid]));
 $PAGE->set_context($context);
 $PAGE->set_pagelayout('course');
-$PAGE->set_title(get_string('coursenode_title', 'local_automatic_badges'));
+$PAGE->set_title(get_string('addnewrule', 'local_automatic_badges'));
 $PAGE->set_heading(format_string($course->fullname));
-
-// === Encabezado de la pagina ===
-echo $OUTPUT->header();
-echo $OUTPUT->heading(get_string('addnewrule', 'local_automatic_badges'), 2);
 
 // === Preparar valores por defecto desde plantilla ===
 $defaults = [];
 if (!empty($template)) {
-    // Obtener parámetros de la plantilla desde URL
     $defaults['criterion_type'] = optional_param('criterion_type', 'grade', PARAM_ALPHA);
     $defaults['grade_min'] = optional_param('grade_min', 60, PARAM_FLOAT);
     $defaults['grade_operator'] = optional_param('grade_operator', '>=', PARAM_TEXT);
@@ -46,21 +41,6 @@ if (!empty($template)) {
     $defaults['forum_count_type'] = optional_param('forum_count_type', 'all', PARAM_ALPHA);
     $defaults['require_submitted'] = optional_param('require_submitted', 1, PARAM_INT);
     $defaults['enabled'] = 1;
-    
-    // Mostrar mensaje de plantilla aplicada
-    $templatenames = [
-        'excellence' => get_string('template_excellence', 'local_automatic_badges'),
-        'participant' => get_string('template_participant', 'local_automatic_badges'),
-        'submission' => get_string('template_submission', 'local_automatic_badges'),
-        'perfect' => get_string('template_perfect', 'local_automatic_badges'),
-        'debater' => get_string('template_debater', 'local_automatic_badges'),
-    ];
-    $templatename = $templatenames[$template] ?? $template;
-    echo $OUTPUT->notification(
-        html_writer::tag('i', '', ['class' => 'fa fa-magic mr-2']) . 
-        "Plantilla aplicada: <strong>{$templatename}</strong>. Personaliza los valores según necesites.",
-        'info'
-    );
 }
 
 // === Construccion del formulario ===
@@ -70,7 +50,6 @@ $mform = new local_automatic_badges_add_rule_form(null, [
     'criterion_type' => $defaults['criterion_type'] ?? 'grade',
 ]);
 
-// Aplicar valores de plantilla al formulario
 if (!empty($defaults)) {
     $mform->set_data((object)$defaults);
 }
@@ -85,15 +64,13 @@ if ($data = $mform->get_data()) {
     $data->selected_activities = optional_param_array('selected_activities', [], PARAM_INT);
     $isTestRun = !empty($data->testrule);
 
-    // Usar rule_manager para procesar la regla
     list($newruleid, $message, $notificationtype, $shouldTest) = rule_manager::process_rule_submission(
         $data,
         $courseid,
-        0, // Nueva regla
+        0,
         $isTestRun
     );
 
-    // Si es "Guardar y probar", redirigir a edit_rule con runtest=1
     if ($shouldTest) {
         redirect(
             new moodle_url('/local/automatic_badges/edit_rule.php', ['id' => $newruleid, 'runtest' => 1])
@@ -108,8 +85,42 @@ if ($data = $mform->get_data()) {
     );
 }
 
+// === Encabezado de la pagina ===
+echo $OUTPUT->header();
+
+// Banner informativo sobre reglas individuales
+echo html_writer::div(
+    html_writer::tag('i', '', ['class' => 'fa fa-list-check fa-2x mr-3', 'style' => 'color: #0f6cbf;']) .
+    html_writer::div(
+        html_writer::tag('h5', get_string('individualrule_info_title', 'local_automatic_badges'),
+            ['class' => 'alert-heading mb-1', 'style' => 'font-weight: 600;']) .
+        html_writer::tag('p', get_string('individualrule_info_body', 'local_automatic_badges'),
+            ['class' => 'mb-0']),
+        'flex-grow-1'
+    ),
+    'alert alert-primary d-flex align-items-center mb-4'
+);
+
+echo $OUTPUT->heading(get_string('addnewrule', 'local_automatic_badges'), 2);
+
+// Notificación de plantilla aplicada
+if (!empty($template)) {
+    $templatenames = [
+        'excellence' => get_string('template_excellence', 'local_automatic_badges'),
+        'participant' => get_string('template_participant', 'local_automatic_badges'),
+        'submission'  => get_string('template_submission', 'local_automatic_badges'),
+        'perfect'     => get_string('template_perfect', 'local_automatic_badges'),
+        'debater'     => get_string('template_debater', 'local_automatic_badges'),
+    ];
+    $templatename = $templatenames[$template] ?? $template;
+    echo $OUTPUT->notification(
+        html_writer::tag('i', '', ['class' => 'fa fa-magic mr-2']) .
+        "Plantilla aplicada: <strong>{$templatename}</strong>. Personaliza los valores según necesites.",
+        'info'
+    );
+}
+
 // === Renderizado del formulario y cierre ===
 $mform->display();
 
 echo $OUTPUT->footer();
-

@@ -138,7 +138,7 @@ class rule_manager {
     public static function activate_badge_if_needed(int $badgeid): bool {
         require_once(\core_component::get_component_directory('core_badges') . '/lib.php');
         
-        $badge = new \core_badges\badge($badgeid);
+        $badge = new \badge($badgeid);
         
         if (method_exists($badge, 'is_active') && !$badge->is_active()) {
             $badge->set_status(BADGE_STATUS_ACTIVE);
@@ -197,7 +197,7 @@ class rule_manager {
         }
         
         // Get badge name for notification
-        $badge = new \core_badges\badge((int)$record->badgeid);
+        $badge = new \badge((int)$record->badgeid);
         $badgename = format_string($badge->name);
         
         // Get notification
@@ -224,10 +224,11 @@ class rule_manager {
      * @return array [0, message, notification_type, false]
      */
     public static function generate_global_rules(object $data, int $courseid, bool $istestrun = false): array {
-        global $CFG;
+        global $CFG, $DB;
 
         // 1. Get Selected Activities
         $selectedIds = isset($data->selected_activities) ? $data->selected_activities : [];
+
         if (empty($selectedIds)) {
             return [
                 0,
@@ -239,14 +240,29 @@ class rule_manager {
 
         $modinfo = get_fast_modinfo($courseid);
         $candidates = [];
-        $targetmod = $data->global_mod_type;
+        $targetmod = $data->global_mod_type ?? '';
 
         foreach ($selectedIds as $cmid) {
             try {
-                $cm = $modinfo->get_cm($cmid);
-                if (!$cm->uservisible) continue;
-                if ($cm->modname !== $targetmod) continue;
-                if (!\local_automatic_badges\helper::is_activity_eligible($cm, $data->criterion_type)) continue;
+                $cm = $modinfo->get_cm((int)$cmid);
+
+                if (!$cm->uservisible) {
+                    continue;
+                }
+                // If a mod type filter is set, respect it
+                if (!empty($targetmod) && $cm->modname !== $targetmod) {
+                    continue;
+                }
+
+                // Check for duplicates
+                if ($DB->record_exists('local_automatic_badges_rules', [
+                    'courseid'       => $courseid,
+                    'activityid'     => $cm->id,
+                    'criterion_type' => $data->criterion_type
+                ])) {
+                    continue;
+                }
+
                 $candidates[] = $cm;
             } catch (\Exception $e) {
                 continue;
@@ -269,12 +285,12 @@ class rule_manager {
 
         require_once($CFG->libdir . '/badgeslib.php');
         
-        $basebadge = new \core_badges\badge($data->badgeid);
+        $basebadge = new \badge($data->badgeid);
         $baseBadgeName = $basebadge->name;
 
         foreach ($candidates as $cm) {
             // Clone badge
-            $newBadgeName = $cm->name . ' - ' . $baseBadgeName; 
+            $newBadgeName = $baseBadgeName . ' - ' . $cm->name; 
             if (mb_strlen($newBadgeName) > 250) {
                 $newBadgeName = mb_substr($newBadgeName, 0, 250);
             }
