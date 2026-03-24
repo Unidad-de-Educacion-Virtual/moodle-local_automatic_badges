@@ -264,3 +264,15 @@
 [24-Mar-2026 01:13:27 UTC] PHP Warning:  Module "openssl" is already loaded in Unknown on line 0
 [24-Mar-2026 01:15:27 UTC] PHP Warning:  PHP Startup: Unable to load dynamic library 'pdo_oci' (tried: C:\xampp\php\ext\pdo_oci (No se puede encontrar el módulo especificado), C:\xampp\php\ext\php_pdo_oci.dll (No se puede encontrar el módulo especificado)) in Unknown on line 0
 [24-Mar-2026 01:15:27 UTC] PHP Warning:  Module "openssl" is already loaded in Unknown on line 0
+[24-Mar-2026 02:57:28 UTC] PHP Warning:  PHP Startup: Unable to load dynamic library 'pdo_oci' (tried: C:\xampp\php\ext\pdo_oci (No se puede encontrar el módulo especificado), C:\xampp\php\ext\php_pdo_oci.dll (No se puede encontrar el módulo especificado)) in Unknown on line 0
+[24-Mar-2026 02:57:28 UTC] PHP Warning:  Module "openssl" is already loaded in Unknown on line 0
+[24-Mar-2026 02:59:28 UTC] PHP Warning:  PHP Startup: Unable to load dynamic library 'pdo_oci' (tried: C:\xampp\php\ext\pdo_oci (No se puede encontrar el módulo especificado), C:\xampp\php\ext\php_pdo_oci.dll (No se puede encontrar el módulo especificado)) in Unknown on line 0
+[24-Mar-2026 02:59:28 UTC] PHP Warning:  Module "openssl" is already loaded in Unknown on line 0
+[24-Mar-2026 03:01:28 UTC] PHP Warning:  PHP Startup: Unable to load dynamic library 'pdo_oci' (tried: C:\xampp\php\ext\pdo_oci (No se puede encontrar el módulo especificado), C:\xampp\php\ext\php_pdo_oci.dll (No se puede encontrar el módulo especificado)) in Unknown on line 0
+[24-Mar-2026 03:01:28 UTC] PHP Warning:  Module "openssl" is already loaded in Unknown on line 0
+[24-Mar-2026 03:03:28 UTC] PHP Warning:  PHP Startup: Unable to load dynamic library 'pdo_oci' (tried: C:\xampp\php\ext\pdo_oci (No se puede encontrar el módulo especificado), C:\xampp\php\ext\php_pdo_oci.dll (No se puede encontrar el módulo especificado)) in Unknown on line 0
+[24-Mar-2026 03:03:28 UTC] PHP Warning:  Module "openssl" is already loaded in Unknown on line 0
+[24-Mar-2026 03:05:28 UTC] PHP Warning:  PHP Startup: Unable to load dynamic library 'pdo_oci' (tried: C:\xampp\php\ext\pdo_oci (No se puede encontrar el módulo especificado), C:\xampp\php\ext\php_pdo_oci.dll (No se puede encontrar el módulo especificado)) in Unknown on line 0
+[24-Mar-2026 03:05:28 UTC] PHP Warning:  Module "openssl" is already loaded in Unknown on line 0
+[24-Mar-2026 03:07:28 UTC] PHP Warning:  PHP Startup: Unable to load dynamic library 'pdo_oci' (tried: C:\xampp\php\ext\pdo_oci (No se puede encontrar el módulo especificado), C:\xampp\php\ext\php_pdo_oci.dll (No se puede encontrar el módulo especificado)) in Unknown on line 0
+[24-Mar-2026 03:07:28 UTC] PHP Warning:  Module "openssl" is already loaded in Unknown on line 0
