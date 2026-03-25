@@ -26,6 +26,13 @@
 
 namespace local_automatic_badges;
 
+/**
+ * Hook callbacks for local_automatic_badges.
+ *
+ * @package    local_automatic_badges
+ * @copyright  2026 Daniela Alexandra Patiño Dávila, Cristian Julian Lamus Lamus
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class hook_callbacks {
     /**
      * Inject a "Return to Automatic Badges" button on Moodle badge pages.

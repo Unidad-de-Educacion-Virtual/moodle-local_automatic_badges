@@ -1,14 +1,18 @@
-alert("Script parsing OK");
+/* global fabric */
 require(["jquery"], function($) {
-    function dlog(m) { 
-        if(typeof m === "object") m = JSON.stringify(m);
-        $("#debug_log").append("<br>" + m); 
-        console.log(m); 
+    function dlog(m) {
+        if (typeof m === "object") {
+            m = JSON.stringify(m);
+        }
+        $("#debug_log").append("<br>" + m);
+        // eslint-disable-next-line no-console
+        console.log(m);
     }
-    
+
     dlog("Init script started");
 
     if (typeof fabric === "undefined") {
+        // eslint-disable-next-line no-alert
         alert("Error: La librería gráfica no pudo cargarse. Por favor verifica tu conexión a internet (CDN).");
         return;
     }
@@ -27,7 +31,9 @@ require(["jquery"], function($) {
         const color = $("#badge_color_bg").val();
         const stroke = $("#badge_color_border").val();
 
-        if (bgShape) canvas.remove(bgShape);
+        if (bgShape) {
+            canvas.remove(bgShape);
+        }
 
         let shape;
         const commonProps = {
@@ -42,14 +48,14 @@ require(["jquery"], function($) {
         };
 
         if (type === "circle") {
-            shape = new fabric.Circle({ radius: baseSize, ...commonProps });
+            shape = new fabric.Circle({radius: baseSize, ...commonProps});
         } else if (type === "square") {
-            shape = new fabric.Rect({ width: baseSize*2, height: baseSize*2, rx: 30, ry: 30, ...commonProps });
+            shape = new fabric.Rect({width: baseSize * 2, height: baseSize * 2, rx: 30, ry: 30, ...commonProps});
         } else {
-            shape = new fabric.Circle({ radius: baseSize, ...commonProps });
+            shape = new fabric.Circle({radius: baseSize, ...commonProps});
         }
-        
-        shape.set("shadow", new fabric.Shadow({ color: "rgba(0,0,0,0.3)", blur: 15, offsetX: 5, offsetY: 5 }));
+
+        shape.set("shadow", new fabric.Shadow({color: "rgba(0,0,0,0.3)", blur: 15, offsetX: 5, offsetY: 5}));
 
         bgShape = shape;
         canvas.add(shape);
@@ -57,8 +63,10 @@ require(["jquery"], function($) {
     }
 
     function createIcon() {
-        if (iconObj) canvas.remove(iconObj);
-        
+        if (iconObj) {
+            canvas.remove(iconObj);
+        }
+
         let unicode = $("#badge_icon").val();
 
         iconObj = new fabric.Text(unicode, {
@@ -76,8 +84,10 @@ require(["jquery"], function($) {
     }
 
     function createText() {
-        if (textObj) canvas.remove(textObj);
-        
+        if (textObj) {
+            canvas.remove(textObj);
+        }
+
         textObj = new fabric.Text($("#badge_text").val(), {
             fontFamily: "Arial",
             fontSize: 28,
@@ -98,8 +108,11 @@ require(["jquery"], function($) {
     });
 
     $("#badge_text").on("input", function() {
-        if (textObj) textObj.set("text", $(this).val());
-        else createText();
+        if (textObj) {
+            textObj.set("text", $(this).val());
+        } else {
+            createText();
+        }
         canvas.renderAll();
     });
 
@@ -117,8 +130,12 @@ require(["jquery"], function($) {
     });
 
     $("#badge_color_icon").on("input", function() {
-        if (iconObj) iconObj.set("fill", $(this).val());
-        if (textObj) textObj.set("fill", $(this).val());
+        if (iconObj) {
+            iconObj.set("fill", $(this).val());
+        }
+        if (textObj) {
+            textObj.set("fill", $(this).val());
+        }
         canvas.renderAll();
     });
 
@@ -126,39 +143,50 @@ require(["jquery"], function($) {
         dlog("Save clicked");
         const btn = $(this);
         const name = $("#badge_text").val();
-        
-        if (!name) { alert("Nombre requerido"); return; }
-        
+
+        if (!name) {
+            // eslint-disable-next-line no-alert
+            alert("Nombre requerido");
+            return;
+        }
+
         dlog("Name: " + name);
         btn.prop("disabled", true).text("Guardando...");
-        
+
         try {
             canvas.discardActiveObject().renderAll();
-            
-            const dataURL = canvas.toDataURL({ format: "png", multiplier: 2 });
+
+            const dataURL = canvas.toDataURL({format: "png", multiplier: 2});
             dlog("DataURL created...");
 
             $.ajax({
-            url: M.cfg.wwwroot + "/local/automatic_badges/ajax/save_badge_design.php",
-            type: "POST",
-            data: {
-                courseid: '.$courseid.',
-                sesskey: M.cfg.sesskey,
-                name: name,
-                imagedata: dataURL
-            },
-            dataType: "json",
-            success: function(r) {
-                if (r.success) window.location.href = M.cfg.wwwroot + "/local/automatic_badges/course_settings.php?id='.$courseid.'&tab=badges";
-                else { alert(r.message); btn.prop("disabled", false).text("Guardar Insignia"); }
-            },
-            error: function(err) {
-                dlog("Error ajax: " + JSON.stringify(err));
-                alert("Error de conexión al guardar.");
-                btn.prop("disabled", false).text("Guardar Insignia");
-            }
-        });
-        } catch(e) {
+                url: M.cfg.wwwroot + "/local/automatic_badges/ajax/save_badge_design.php",
+                type: "POST",
+                data: {
+                    courseid: '.$courseid.',
+                    sesskey: M.cfg.sesskey,
+                    name: name,
+                    imagedata: dataURL
+                },
+                dataType: "json",
+                success: function(r) {
+                    if (r.success) {
+                        window.location.href = M.cfg.wwwroot +
+                            "/local/automatic_badges/course_settings.php?id='.$courseid.'&tab=badges";
+                    } else {
+                        // eslint-disable-next-line no-alert
+                        alert(r.message);
+                        btn.prop("disabled", false).text("Guardar Insignia");
+                    }
+                },
+                error: function(err) {
+                    dlog("Error ajax: " + JSON.stringify(err));
+                    // eslint-disable-next-line no-alert
+                    alert("Error de conexión al guardar.");
+                    btn.prop("disabled", false).text("Guardar Insignia");
+                }
+            });
+        } catch (e) {
             dlog("Error in save: " + e.message);
         }
     });
@@ -174,7 +202,7 @@ require(["jquery"], function($) {
             dlog("Text created");
             canvas.renderAll();
             dlog("Rendered");
-        } catch(e) {
+        } catch (e) {
             dlog("Error en inicializacion: " + e.message);
         }
     }, 500);

@@ -321,10 +321,14 @@ class local_automatic_badges_add_rule_form extends moodleform {
         $mform->addElement('static', 'activity_picker_dummy', get_string('activitylinked', 'local_automatic_badges'), $widgethtml);
 
         $gradeiteminfoid = 'grade_item_info_box';
-        $mform->addElement('html', '<div id="' . $gradeiteminfoid . '" class="alert alert-info" style="display:none; margin-top:8px; border-left:4px solid #0f6cbf;">
-            <i class="fa fa-info-circle"></i> <strong>' . get_string('criterion_grade_item_info_title', 'local_automatic_badges') . '</strong><br>
-            ' . get_string('criterion_grade_item_info', 'local_automatic_badges') . '
-        </div>');
+        $infohtml  = '<div id="' . $gradeiteminfoid . '" class="alert alert-info"';
+        $infohtml .= ' style="display:none; margin-top:8px; border-left:4px solid #0f6cbf;">';
+        $infohtml .= '<i class="fa fa-info-circle"></i> ';
+        $infohtml .= '<strong>' . get_string('criterion_grade_item_info_title', 'local_automatic_badges');
+        $infohtml .= '</strong><br>';
+        $infohtml .= get_string('criterion_grade_item_info', 'local_automatic_badges');
+        $infohtml .= '</div>';
+        $mform->addElement('html', $infohtml);
 
         // SECTION 3: Insignia a otorgar.
 
