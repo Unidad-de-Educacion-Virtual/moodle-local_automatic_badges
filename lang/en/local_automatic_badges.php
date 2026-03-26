@@ -1,34 +1,21 @@
 <?php
-// This file is part of local_automatic_badges - https://moodle.org/.
+// This file is part of Moodle - http://moodle.org/
 //
-// local_automatic_badges is free software: you can redistribute it and/or modify
+// Moodle is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 //
-// local_automatic_badges is distributed in the hope that it will be useful,
+// Moodle is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with local_automatic_badges.  If not, see <https://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * This file is part of local_automatic_badges
- *
- * local_automatic_badges is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * local_automatic_badges is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with local_automatic_badges.  If not, see <http://www.gnu.org/licenses/>.
+ * English language strings for local_automatic_badges.
  *
  * @package    local_automatic_badges
  * @author     Daniela Alexandra Patiño Dávila
@@ -53,7 +40,7 @@ $string['awardmanually'] = 'Award manually';
 $string['badgenamecolumn'] = 'Badge';
 $string['badgestatus'] = 'Badge status';
 $string['bonusvalue'] = 'Bonus points';
-$string['bonusvalue_help'] = 'Enter the amount of bonus points to grant when the rule awards the badge. Points are registered in the gradebook under the \"Bonuses (Auto Badges)\" category as Extra Credit, without inflating the maximum course grade.';
+$string['bonusvalue_help'] = 'Enter the amount of bonus points to grant when the rule awards the badge. Points are registered in the gradebook under the "Bonuses (Auto Badges)" category as Extra Credit, without inflating the maximum course grade.';
 $string['configsaved'] = 'Configuration saved';
 $string['coursebadgestitle'] = 'Course badges';
 $string['coursecolumn'] = 'Course';
