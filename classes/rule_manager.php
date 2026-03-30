@@ -158,7 +158,7 @@ class rule_manager {
     public static function activate_badge_if_needed(int $badgeid): bool {
         require_once(\core_component::get_component_directory('core_badges') . '/lib.php');
 
-        $badge = new \badge($badgeid);
+        $badge = new \core_badges\badge($badgeid);
 
         if (method_exists($badge, 'is_active') && !$badge->is_active()) {
             $badge->set_status(BADGE_STATUS_ACTIVE);
@@ -213,7 +213,7 @@ class rule_manager {
         }
 
         // Get badge name for notification.
-        $badge = new \badge((int)$record->badgeid);
+        $badge = new \core_badges\badge((int)$record->badgeid);
         $badgename = format_string($badge->name);
 
         // Get notification.
@@ -288,7 +288,7 @@ class rule_manager {
 
         require_once($CFG->libdir . '/badgeslib.php');
 
-        $basebadge = new \badge($data->badgeid);
+        $basebadge = new \core_badges\badge($data->badgeid);
         $basebadgename = $basebadge->name;
 
         foreach ($candidates as $cm) {

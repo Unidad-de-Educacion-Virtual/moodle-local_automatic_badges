@@ -68,10 +68,15 @@ class observer {
                 continue;
             }
 
-            $badge = new \badge((int)$rule->badgeid);
+            $badge = new \core_badges\badge((int)$rule->badgeid);
             if ($badge->is_issued($userid)) {
                 debugging('Badge ' . $rule->badgeid . ' already issued to user ' . $userid, DEBUG_DEVELOPER);
                 continue;
+            }
+
+            // Inject custom message if provided.
+            if (!empty($rule->notify_message)) {
+                $badge->message = $rule->notify_message;
             }
 
             // Issue badge.
@@ -137,10 +142,15 @@ class observer {
                 continue;
             }
 
-            $badge = new \badge((int)$rule->badgeid);
+            $badge = new \core_badges\badge((int)$rule->badgeid);
             if ($badge->is_issued($userid)) {
                 debugging('Badge ' . $rule->badgeid . ' already issued to user ' . $userid, DEBUG_DEVELOPER);
                 continue;
+            }
+
+            // Inject custom message if provided.
+            if (!empty($rule->notify_message)) {
+                $badge->message = $rule->notify_message;
             }
 
             // Issue badge.

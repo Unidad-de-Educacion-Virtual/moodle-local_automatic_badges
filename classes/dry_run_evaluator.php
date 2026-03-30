@@ -84,7 +84,7 @@ class dry_run_evaluator {
             return $result;
         }
 
-        $badge = new \badge($badgeid);
+        $badge = new \core_badges\badge($badgeid);
         $result['badgename'] = format_string($badge->name);
 
         // Evaluate based on criterion type.
@@ -266,40 +266,57 @@ class dry_run_evaluator {
     private static function evaluate_submission(int $courseid, \cm_info $cm, array $userids, array $users, object $config): array {
         global $DB;
 
-        if (!in_array($cm->modname, ['assign', 'workshop'], true)) {
+        if ($cm->modname !== 'assign') {
             return [];
         }
 
-        $reqsubmitted = !empty($config->require_submitted);
+        $assign = $DB->get_record('assign', ['id' => $cm->instance]);
+        if (!$assign) return [];
+
         $reqgraded = !empty($config->require_graded);
+        $subtype = $config->submission_type ?? 'any';
+        $deadline = !empty($assign->cutoffdate) ? $assign->cutoffdate : $assign->duedate;
 
         [$usql, $params] = $DB->get_in_or_equal($userids);
 
         if ($reqgraded) {
-            $sql = "SELECT s.userid, g.grade
+            $sql = "SELECT s.userid, s.status, s.timemodified, g.grade
                     FROM {assign_submission} s
                     JOIN {assign_grades} g ON s.assignment = g.assignment AND s.userid = g.userid
-                    WHERE s.assignment = ? AND s.userid $usql AND g.grade >= 0";
-            if ($reqsubmitted) {
-                $sql .= " AND s.status = 'submitted'";
-            }
+                    WHERE s.assignment = ? AND s.userid $usql AND s.latest = 1 AND g.grade >= 0";
         } else {
-            $sql = "SELECT s.userid, s.status
+            $sql = "SELECT s.userid, s.status, s.timemodified
                     FROM {assign_submission} s
-                    WHERE s.assignment = ? AND s.userid $usql";
-            if ($reqsubmitted) {
-                $sql .= " AND s.status = 'submitted'";
-            }
+                    WHERE s.assignment = ? AND s.userid $usql AND s.latest = 1";
         }
+        
         $params = array_merge([$cm->instance], $params);
         $records = $DB->get_records_sql($sql, $params);
 
         $eligible = [];
         foreach ($records as $rec) {
+            // Must be submitted
+            if ($rec->status !== 'submitted') continue;
+
+            // Check timing conditions
+            if ($subtype === 'ontime') {
+                if ($deadline && $rec->timemodified > $deadline) continue;
+            } elseif ($subtype === 'early') {
+                $earlyhours = (int)($config->early_hours ?? 0);
+                $targettime = $deadline - ($earlyhours * 3600);
+                if ($deadline && $rec->timemodified > $targettime) continue;
+            }
+
             if (isset($users[$rec->userid])) {
-                $detail = isset($rec->grade)
-                    ? get_string('grade', 'grades') . ': ' . round($rec->grade, 2)
-                    : ($rec->status ?? 'submitted');
+                $statusstr = ($subtype === 'ontime' ? 'A tiempo' : ($subtype === 'early' ? 'Temprana' : 'Entregada'));
+                // Append the localized Moodle date
+                $datestr = userdate($rec->timemodified, get_string('strftimedatetimeshort', 'core_langconfig'));
+                
+                $detail = $statusstr . ' el ' . $datestr;
+                if (isset($rec->grade)) {
+                    $detail .= ' (Nota: ' . round($rec->grade, 2) . ')';
+                }
+
                 $eligible[$rec->userid] = (object)[
                     'id'       => $rec->userid,
                     'fullname' => fullname($users[$rec->userid]),

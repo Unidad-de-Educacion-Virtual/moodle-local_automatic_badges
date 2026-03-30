@@ -323,7 +323,7 @@ class helper {
         }
 
         // Copy Badge Image.
-        $badgeobj = new \badge($basebadgeid);
+        $badgeobj = new \core_badges\badge($basebadgeid);
         $badgecontext = $badgeobj->get_context();
         $targetcontext = \context_course::instance($courseid);
         $fs = get_file_storage();
