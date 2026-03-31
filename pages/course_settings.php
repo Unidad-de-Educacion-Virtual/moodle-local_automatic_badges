@@ -144,9 +144,8 @@ if (!empty($testaction) && $currenttab === 'testlogic' && confirm_sesskey()) {
                     if (!$badge->is_issued($u->id)) {
                         // Capture any debugging output (e.g. "Error calling message processor email").
                         // So it doesn't break the redirect with "Error de salida".
-                        if (!empty($rule->notify_message)) {
-                            $badge->message = $rule->notify_message;
-                        }
+                        // Use the rich dynamically constructed notification message.
+                        $badge->message = \local_automatic_badges\helper::build_notify_message($rule, $cm);
 
                         ob_start();
                         $badge->issue($u->id);
@@ -190,9 +189,8 @@ if (!empty($testaction) && $currenttab === 'testlogic' && confirm_sesskey()) {
         if ($rulepasses) {
             $badge = new \core_badges\badge($rule->badgeid);
             if (!$badge->is_issued($targetuserid)) {
-                if (!empty($rule->notify_message)) {
-                    $badge->message = $rule->notify_message;
-                }
+                    // Use the rich dynamically constructed notification message.
+                    $badge->message = \local_automatic_badges\helper::build_notify_message($rule, $cm);
 
                 ob_start();
                 $badge->issue($targetuserid);

@@ -56,6 +56,11 @@ class hook_callbacks {
             return;
         }
 
+        $coursecontext = \context_course::instance($courseid, IGNORE_MISSING);
+        if (!$coursecontext || !has_capability('moodle/badges:configurecriteria', $coursecontext)) {
+            return;
+        }
+
         $returnurl = new \moodle_url('/local/automatic_badges/course_settings.php', ['id' => $courseid, 'tab' => 'badges']);
 
         $PAGE->requires->js_amd_inline("

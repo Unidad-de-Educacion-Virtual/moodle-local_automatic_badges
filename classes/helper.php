@@ -347,4 +347,55 @@ class helper {
 
         return $newid;
     }
+
+    /**
+     * Constructs a custom notification message appending context about the activity and criterion.
+     *
+     * @param \stdClass $rule The rule object.
+     * @param \cm_info|null $cm The course module info.
+     * @return string HTML message ready for badge issuance.
+     */
+    public static function build_notify_message(\stdClass $rule, ?\cm_info $cm): string {
+        $base = !empty($rule->notify_message) 
+            ? $rule->notify_message 
+            : get_config('local_automatic_badges', 'default_notify_message');
+
+        if (!$cm) {
+            return format_text($base, FORMAT_HTML);
+        }
+
+        $criterion = '';
+        switch ($rule->criterion_type) {
+            case 'forum':
+                $criterion = "Realizar " . ((int)($rule->forum_posts ?? 0)) . " publicaciones en el foro";
+                break;
+            case 'submission':
+                $criterion = "Realizar la entrega de la actividad";
+                if (!empty($rule->require_ontime)) {
+                    $criterion .= " a tiempo";
+                }
+                break;
+            case 'grade':
+            case 'forum_grade':
+            case 'grade_item':
+            default:
+                $op = $rule->grade_operator ?? '>=';
+                if ($op === 'range') {
+                    $criterion = "Obtener una calificación entre {$rule->grade_min}% y {$rule->grade_max}%";
+                } else {
+                    // Normalize >= text description realistically
+                    $optext = ($op === '>') ? 'mayor a' : 'mayor o igual al';
+                    $criterion = "Obtener una calificación {$optext} {$rule->grade_min}%";
+                }
+                break;
+        }
+
+        $html = "<br><br><div style='padding: 15px; border-left: 4px solid #007bff; background-color: #f8f9fa; border-radius: 4px; margin-top:20px; font-family: sans-serif;'>";
+        $html .= "<h4 style='margin-top:0; color: #007bff; font-size: 16px;'>Detalles de Obtención</h4>";
+        $html .= "<p style='margin-bottom: 5px; font-size: 14px;'><strong>Actividad Asociada:</strong> " . format_string($cm->name) . "</p>";
+        $html .= "<p style='margin-bottom: 0; font-size: 14px;'><strong>Criterio Cumplido:</strong> " . $criterion . "</p>";
+        $html .= "</div>";
+
+        return format_text($base, FORMAT_HTML) . $html;
+    }
 }

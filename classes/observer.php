@@ -75,9 +75,8 @@ class observer {
             }
 
             // Inject custom message if provided.
-            if (!empty($rule->notify_message)) {
-                $badge->message = $rule->notify_message;
-            }
+            // Use the rich dynamically constructed notification message.
+            $badge->message = \local_automatic_badges\helper::build_notify_message($rule, $cm);
 
             // Issue badge.
             $badge->issue($userid);
@@ -149,9 +148,8 @@ class observer {
             }
 
             // Inject custom message if provided.
-            if (!empty($rule->notify_message)) {
-                $badge->message = $rule->notify_message;
-            }
+            // Use the rich dynamically constructed notification message.
+            $badge->message = \local_automatic_badges\helper::build_notify_message($rule, $cm);
 
             // Issue badge.
             $badge->issue($userid);
