@@ -288,6 +288,15 @@ echo $OUTPUT->footer();
 
 /**
  * Render the Rules tab content.
+ *
+ * @param int $courseid The course ID.
+ * @param \renderer_base $OUTPUT Moodle output renderer.
+ * @param \moodle_page $PAGE Moodle page object.
+ * @param \moodle_database $DB Moodle database object.
+ * @param int $page Current page number.
+ * @param int $perpage Items per page.
+ * @param string $sort Sort column.
+ * @param string $dir Sort direction.
  */
 function render_rules_tab($courseid, $OUTPUT, $PAGE, $DB, $page, $perpage, $sort, $dir) {
     // Add rule buttons: individual and global.
@@ -466,6 +475,14 @@ function render_rules_tab($courseid, $OUTPUT, $PAGE, $DB, $page, $perpage, $sort
 
 /**
  * Render the Badges tab content.
+ *
+ * @param int $courseid The course ID.
+ * @param \renderer_base $OUTPUT Moodle output renderer.
+ * @param \moodle_database $DB Moodle database object.
+ * @param int $page Current page number.
+ * @param int $perpage Items per page.
+ * @param string $sort Sort column.
+ * @param string $dir Sort direction.
  */
 function render_badges_tab($courseid, $OUTPUT, $DB, $page, $perpage, $sort, $dir) {
     global $CFG;
@@ -583,6 +600,9 @@ function render_badges_tab($courseid, $OUTPUT, $DB, $page, $perpage, $sort, $dir
 
 /**
  * Render the Templates tab content.
+ *
+ * @param int $courseid The course ID.
+ * @param \renderer_base $OUTPUT Moodle output renderer.
  */
 function render_templates_tab($courseid, $OUTPUT) {
     echo html_writer::tag('h4', get_string('templates_title', 'local_automatic_badges'), ['class' => 'mb-3']);
@@ -668,6 +688,10 @@ function render_templates_tab($courseid, $OUTPUT) {
 
 /**
  * Render the History tab content.
+ *
+ * @param int $courseid The course ID.
+ * @param \renderer_base $OUTPUT Moodle output renderer.
+ * @param \moodle_database $DB Moodle database object.
  */
 function render_history_tab($courseid, $OUTPUT, $DB) {
     echo html_writer::tag('h4', get_string('history_title', 'local_automatic_badges'), ['class' => 'mb-3']);
@@ -758,6 +782,10 @@ function render_history_tab($courseid, $OUTPUT, $DB) {
 
 /**
  * Render the Settings tab content.
+ *
+ * @param int $courseid The course ID.
+ * @param \renderer_base $OUTPUT Moodle output renderer.
+ * @param \moodle_database $DB Moodle database object.
  */
 function render_settings_tab($courseid, $OUTPUT, $DB) {
     global $CFG;
@@ -845,6 +873,12 @@ function render_settings_tab($courseid, $OUTPUT, $DB) {
 
 /**
  * Render the Test Logic / Diagnostic tab content.
+ *
+ * @param int $courseid The course ID.
+ * @param \renderer_base $OUTPUT Moodle output renderer.
+ * @param \moodle_database $DB Moodle database object.
+ * @param \moodle_page $PAGE Moodle page object.
+ * @param \context $context Moodle context object.
  */
 function render_testlogic_tab($courseid, $OUTPUT, $DB, $PAGE, $context) {
     global $CFG;
@@ -952,16 +986,16 @@ function render_testlogic_tab($courseid, $OUTPUT, $DB, $PAGE, $context) {
             } else if ($rule->criterion_type === 'submission' && $cm && $cm->modname === 'assign') {
                  global $DB;
                  $submission = $DB->get_record('assign_submission', [
-                     'assignment' => $cm->instance, 
-                     'userid' => $userid, 
-                     'latest' => 1
+                     'assignment' => $cm->instance,
+                     'userid' => $userid,
+                     'latest' => 1,
                  ]);
-                 if ($submission && $submission->status === 'submitted') {
-                     $gradeinfo = '<span class="text-success"><i class="fa fa-clock mr-1"></i>Entregada:</span> ' . 
-                                  userdate($submission->timemodified, get_string('strftimedatetimeshort', 'core_langconfig'));
-                 } else {
-                     $gradeinfo = '<span class="text-muted">Sin entrega registrada</span>';
-                 }
+                if ($submission && $submission->status === 'submitted') {
+                    $gradeinfo = '<span class="text-success"><i class="fa fa-clock mr-1"></i>Entregada:</span> ';
+                    $gradeinfo .= userdate($submission->timemodified, get_string('strftimedatetimeshort', 'core_langconfig'));
+                } else {
+                    $gradeinfo = '<span class="text-muted">Sin entrega registrada</span>';
+                }
             } else if ($rule->is_global_rule) {
                  $gradeinfo = "<span class='text-muted'>Regla Global ({$rule->activity_type})</span>";
                  $activityname = "Múltiples";
@@ -1099,6 +1133,11 @@ function render_testlogic_tab($courseid, $OUTPUT, $DB, $PAGE, $context) {
 
 /**
  * Helper inside course_settings.php to get a mock grade for diagnostic tools.
+ *
+ * @param int $courseid The course ID.
+ * @param int $userid The user ID.
+ * @param \cm_info|null $cm The course module info.
+ * @return mixed
  */
 function _testlogic_get_grade($courseid, $userid, $cm) {
     if (!$cm) {

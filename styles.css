@@ -191,7 +191,7 @@
 .stat-card {
     padding: 1.25rem;
     border-radius: 0.5rem;
-    background: var(--white, #ffffff);
+    background: var(--white, #fff);
     border: 1px solid var(--gray-200, #e9ecef);
     border-left: 4px solid var(--primary, #0f6cbf);
     transition: box-shadow 0.2s ease;
@@ -495,9 +495,9 @@ body.dark-mode .template-card {
 .ab-select__search {
     display: block;
     width: 100%;
-    padding: 0.25rem 0.5rem 0.25rem 1.6rem !important;
-    font-size: 0.85rem !important;
-    background: var(--white, #fff) !important;
+    padding: 0.25rem 0.5rem 0.25rem 1.6rem;
+    font-size: 0.85rem;
+    background: var(--white, #fff);
 }
 
 .ab-select__search:focus {

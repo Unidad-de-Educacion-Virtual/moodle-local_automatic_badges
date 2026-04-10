@@ -180,29 +180,47 @@ class rule_engine {
     private static function check_submission_rule(\stdClass $rule, int $userid): bool {
         global $DB;
 
-        if (empty($rule->activityid)) return false;
+        if (empty($rule->activityid)) {
+            return false;
+        }
 
         $cm = get_coursemodule_from_id(null, $rule->activityid, 0, false, IGNORE_MISSING);
-        if (!$cm || $cm->modname !== 'assign') return false;
+        if (!$cm || $cm->modname !== 'assign') {
+            return false;
+        }
 
         $assign = $DB->get_record('assign', ['id' => $cm->instance]);
-        if (!$assign) return false;
+        if (!$assign) {
+            return false;
+        }
 
-        // Ensure user has submitted
-        $submission = $DB->get_record('assign_submission', ['assignment' => $assign->id, 'userid' => $userid, 'latest' => 1]);
-        if (!$submission || $submission->status !== 'submitted') return false;
+        // Ensure user has submitted.
+        $submission = $DB->get_record('assign_submission', [
+            'assignment' => $assign->id,
+            'userid' => $userid,
+            'latest' => 1,
+        ]);
+        if (!$submission || $submission->status !== 'submitted') {
+            return false;
+        }
 
-        // If 'require_graded' is checked
+        // If 'require_graded' is checked.
         if (!empty($rule->require_graded)) {
             $grade = $DB->get_record('assign_grades', ['assignment' => $assign->id, 'userid' => $userid]);
-            if (!$grade || $grade->grade === null || $grade->grade < 0) return false;
+            if (!$grade || $grade->grade === null || $grade->grade < 0) {
+                return false;
+            }
         }
 
         $subtype = $rule->submission_type ?? 'any';
-        if ($subtype === 'any') return true;
+        if ($subtype === 'any') {
+            return true;
+        }
 
         $deadline = !empty($assign->cutoffdate) ? $assign->cutoffdate : $assign->duedate;
-        if (empty($deadline)) return true;
+        if (empty($deadline)) {
+            return true;
+        }
 
         if ($subtype === 'ontime') {
             return $submission->timemodified <= $deadline;
@@ -319,9 +337,10 @@ class rule_engine {
     /**
      * Compares a grade using the specified operator.
      *
-     * @param float $grade Calificación del estudiante
-     * @param string $operator Operador de comparación (>=, >, <=, <, ==)
-     * @param float $threshold Valor de referencia
+     * @param float $grade Calificación del estudiante.
+     * @param string $operator Operador de comparación (>=, >, <=, <, ==).
+     * @param float $threshold Valor de referencia.
+     * @param float|null $grademax Maximum grade for range operator.
      * @return bool
      */
     private static function compare_grade(float $grade, string $operator, float $threshold, ?float $grademax = null): bool {

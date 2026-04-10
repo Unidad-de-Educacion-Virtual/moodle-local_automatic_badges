@@ -32,9 +32,16 @@ namespace local_automatic_badges;
  * Helper class to provide central logic for the plugin.
  */
 class helper {
+    /**
+     * Checks whether the automatic badges feature is enabled for a course.
+     *
+     * @param int|object $courseorid Course ID or object.
+     * @param string $shortname Configuration shortname.
+     * @return bool
+     */
     public static function is_enabled_course($courseorid, string $shortname = 'automatic_badges_enabled'): bool {
         global $DB;
-        
+
         // Normalize to integer ID.
         $courseid = is_object($courseorid) ? (int)$courseorid->id : (int)$courseorid;
 
@@ -48,7 +55,7 @@ class helper {
             // Log in cron output.
             mtrace('is_enabled_course error (courseid ' . $courseid . '): ' . $e->getMessage());
         }
-        
+
         // Default to false if not configured.
         return false;
     }
@@ -356,8 +363,8 @@ class helper {
      * @return string HTML message ready for badge issuance.
      */
     public static function build_notify_message(\stdClass $rule, ?\cm_info $cm): string {
-        $base = !empty($rule->notify_message) 
-            ? $rule->notify_message 
+        $base = !empty($rule->notify_message)
+            ? $rule->notify_message
             : get_config('local_automatic_badges', 'default_notify_message');
 
         if (!$cm) {
@@ -383,16 +390,19 @@ class helper {
                 if ($op === 'range') {
                     $criterion = "Obtener una calificación entre {$rule->grade_min}% y {$rule->grade_max}%";
                 } else {
-                    // Normalize >= text description realistically
+                    // Normalize >= text description realistically.
                     $optext = ($op === '>') ? 'mayor a' : 'mayor o igual al';
                     $criterion = "Obtener una calificación {$optext} {$rule->grade_min}%";
                 }
                 break;
         }
 
-        $html = "<br><br><div style='padding: 15px; border-left: 4px solid #007bff; background-color: #f8f9fa; border-radius: 4px; margin-top:20px; font-family: sans-serif;'>";
+        $style = "padding: 15px; border-left: 4px solid #007bff; background-color: #f8f9fa;";
+        $style .= " border-radius: 4px; margin-top:20px; font-family: sans-serif;";
+        $html = "<br><br><div style='" . $style . "'>";
         $html .= "<h4 style='margin-top:0; color: #007bff; font-size: 16px;'>Detalles de Obtención</h4>";
-        $html .= "<p style='margin-bottom: 5px; font-size: 14px;'><strong>Actividad Asociada:</strong> " . format_string($cm->name) . "</p>";
+        $html .= "<p style='margin-bottom: 5px; font-size: 14px;'>";
+        $html .= "<strong>Actividad Asociada:</strong> " . format_string($cm->name) . "</p>";
         $html .= "<p style='margin-bottom: 0; font-size: 14px;'><strong>Criterio Cumplido:</strong> " . $criterion . "</p>";
         $html .= "</div>";
 

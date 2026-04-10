@@ -920,7 +920,7 @@ JS
             }
 
             if (isset($data['grade_operator']) && $data['grade_operator'] === 'range') {
-                // grade_max is required when operator is range.
+                // Grade_max is required when operator is range.
                 if (!isset($data['grade_max']) || $data['grade_max'] === '' || $data['grade_max'] === null) {
                     $errors['grade_max'] = get_string('required');
                 } else {

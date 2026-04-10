@@ -271,7 +271,9 @@ class dry_run_evaluator {
         }
 
         $assign = $DB->get_record('assign', ['id' => $cm->instance]);
-        if (!$assign) return [];
+        if (!$assign) {
+            return [];
+        }
 
         $reqgraded = !empty($config->require_graded);
         $subtype = $config->submission_type ?? 'any';
@@ -289,29 +291,35 @@ class dry_run_evaluator {
                     FROM {assign_submission} s
                     WHERE s.assignment = ? AND s.userid $usql AND s.latest = 1";
         }
-        
+
         $params = array_merge([$cm->instance], $params);
         $records = $DB->get_records_sql($sql, $params);
 
         $eligible = [];
         foreach ($records as $rec) {
-            // Must be submitted
-            if ($rec->status !== 'submitted') continue;
+            // Must be submitted.
+            if ($rec->status !== 'submitted') {
+                continue;
+            }
 
-            // Check timing conditions
+            // Check timing conditions.
             if ($subtype === 'ontime') {
-                if ($deadline && $rec->timemodified > $deadline) continue;
-            } elseif ($subtype === 'early') {
+                if ($deadline && $rec->timemodified > $deadline) {
+                    continue;
+                }
+            } else if ($subtype === 'early') {
                 $earlyhours = (int)($config->early_hours ?? 0);
                 $targettime = $deadline - ($earlyhours * 3600);
-                if ($deadline && $rec->timemodified > $targettime) continue;
+                if ($deadline && $rec->timemodified > $targettime) {
+                    continue;
+                }
             }
 
             if (isset($users[$rec->userid])) {
                 $statusstr = ($subtype === 'ontime' ? 'A tiempo' : ($subtype === 'early' ? 'Temprana' : 'Entregada'));
-                // Append the localized Moodle date
+                // Append the localized Moodle date.
                 $datestr = userdate($rec->timemodified, get_string('strftimedatetimeshort', 'core_langconfig'));
-                
+
                 $detail = $statusstr . ' el ' . $datestr;
                 if (isset($rec->grade)) {
                     $detail .= ' (Nota: ' . round($rec->grade, 2) . ')';
