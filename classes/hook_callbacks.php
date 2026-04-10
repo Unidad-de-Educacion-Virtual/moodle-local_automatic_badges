@@ -63,28 +63,10 @@ class hook_callbacks {
 
         $returnurl = new \moodle_url('/local/automatic_badges/course_settings.php', ['id' => $courseid, 'tab' => 'badges']);
 
-        $PAGE->requires->js_amd_inline("
-            require(['jquery'], function($) {
-                var returnUrl = '" . $returnurl->out(false) . "';
-                var actionArea = $('#fitem_id_buttonar, .form-group .fsubmit, [data-groupname=\"buttonar\"]');
-
-                if (actionArea.length) {
-                    var backBtn = $('<a>')
-                        .attr('href', returnUrl)
-                        .addClass('btn btn-outline-secondary ml-2')
-                        .html('<i class=\"fa fa-arrow-left mr-1\"></i> Volver a Automatic Badges');
-                    actionArea.find('.form-inline, .felement, .fdefaultcustom, div').last().append(backBtn);
-                }
-
-                var heading = $('#region-main h2, #region-main .h2').first();
-                if (heading.length) {
-                    var topLink = $('<a>')
-                        .attr('href', returnUrl)
-                        .addClass('btn btn-sm btn-outline-secondary mb-3 d-inline-block')
-                        .html('<i class=\"fa fa-arrow-left mr-1\"></i> Volver a Automatic Badges');
-                    heading.before(topLink);
-                }
-            });
-        ");
+        $PAGE->requires->js_call_amd(
+            'local_automatic_badges/course_settings',
+            'addBackButton',
+            [$returnurl->out(false)]
+        );
     }
 }

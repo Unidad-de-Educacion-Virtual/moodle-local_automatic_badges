@@ -903,33 +903,26 @@ function local_automatic_badges_render_testlogic_tab($courseid, $OUTPUT, $DB, $P
     echo html_writer::end_div();
     echo html_writer::start_div('card-body');
 
-    echo '<form method="get" class="d-flex align-items-center flex-wrap">';
-    echo '<input type="hidden" name="id" value="' . $courseid . '">';
-    echo '<input type="hidden" name="tab" value="testlogic">';
-    echo '<label class="mr-3 font-weight-bold mb-0" style="white-space: nowrap;"><i class="fa fa-user mr-1"></i> Usuario:</label>';
-    echo '<div style="flex: 1; min-width: 250px; max-width: 400px;" class="mr-3 mb-0">';
-    echo '<select id="testlogic-user-select" name="userid" class="custom-select w-100">';
-    echo '<option value="0">Selecciona un usuario...</option>';
+    $formattrs = ['method' => 'get', 'class' => 'd-flex align-items-center flex-wrap'];
+    echo html_writer::start_tag('form', $formattrs);
+    echo html_writer::empty_tag('input', ['type' => 'hidden', 'name' => 'id', 'value' => $courseid]);
+    echo html_writer::empty_tag('input', ['type' => 'hidden', 'name' => 'tab', 'value' => 'testlogic']);
+    $labelcontent = '<i class="fa fa-user mr-1"></i> Usuario:';
+    echo html_writer::tag('label', $labelcontent, ['class' => 'mr-3 font-weight-bold mb-0',
+        'style' => 'white-space: nowrap;']);
+    echo html_writer::start_div('mr-3 mb-0', ['style' => 'flex: 1; min-width: 250px; max-width: 400px;']);
+    $selectoptions = [0 => 'Selecciona un usuario...'];
     foreach ($users as $u) {
-        $selected = ($u->id == $userid) ? 'selected' : '';
-        echo "<option value='{$u->id}' {$selected}>" . fullname($u) . "</option>";
+        $selectoptions[$u->id] = fullname($u);
     }
-    echo '</select>';
-    echo '</div>';
-    echo '<button type="submit" class="btn btn-primary btn-sm mb-0"><i class="fa fa-search mr-1"></i> Evaluar</button>';
-    echo '</form>';
+    echo html_writer::select($selectoptions, 'userid', $userid, false,
+        ['id' => 'testlogic-user-select', 'class' => 'custom-select w-100']);
+    echo html_writer::end_div();
+    $btncontent = '<i class="fa fa-search mr-1"></i> Evaluar';
+    echo html_writer::tag('button', $btncontent, ['type' => 'submit', 'class' => 'btn btn-primary btn-sm mb-0']);
+    echo html_writer::end_tag('form');
 
-    $PAGE->requires->js_amd_inline("
-        require(['core/form-autocomplete', 'jquery'], function(autocomplete, $) {
-            // Inicializar como selector único (tags = false, ajax = false).
-            autocomplete.enhance('#testlogic-user-select', false, false, 'Escribe un nombre...');
-            $('#testlogic-user-select').on('change', function() {
-                if ($(this).val() !== '' && $(this).val() != '0') {
-                    $(this).closest('form').submit();
-                }
-            });
-        });
-    ");
+    $PAGE->requires->js_call_amd('local_automatic_badges/course_settings', 'initUserSelect', ['#testlogic-user-select']);
 
     // 2. Load Rules.
     $rules = $DB->get_records('local_automatic_badges_rules', ['courseid' => $courseid]);
