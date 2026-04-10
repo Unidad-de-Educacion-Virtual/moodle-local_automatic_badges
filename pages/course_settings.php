@@ -260,22 +260,22 @@ echo html_writer::start_div('local-automatic-badges-tab-content mt-3');
 
 switch ($currenttab) {
     case 'rules':
-        render_rules_tab($courseid, $OUTPUT, $PAGE, $DB, $page, $perpage, $sort, $dir);
+        local_automatic_badges_render_rules_tab($courseid, $OUTPUT, $PAGE, $DB, $page, $perpage, $sort, $dir);
         break;
     case 'badges':
-        render_badges_tab($courseid, $OUTPUT, $DB, $page, $perpage, $sort, $dir);
+        local_automatic_badges_render_badges_tab($courseid, $OUTPUT, $DB, $page, $perpage, $sort, $dir);
         break;
     case 'templates':
-        render_templates_tab($courseid, $OUTPUT);
+        local_automatic_badges_render_templates_tab($courseid, $OUTPUT);
         break;
     case 'history':
-        render_history_tab($courseid, $OUTPUT, $DB);
+        local_automatic_badges_render_history_tab($courseid, $OUTPUT, $DB);
         break;
     case 'testlogic':
-        render_testlogic_tab($courseid, $OUTPUT, $DB, $PAGE, $context);
+        local_automatic_badges_render_testlogic_tab($courseid, $OUTPUT, $DB, $PAGE, $context);
         break;
     case 'settings':
-        render_settings_tab($courseid, $OUTPUT, $DB);
+        local_automatic_badges_render_settings_tab($courseid, $OUTPUT, $DB);
         break;
 }
 
@@ -298,7 +298,7 @@ echo $OUTPUT->footer();
  * @param string $sort Sort column.
  * @param string $dir Sort direction.
  */
-function render_rules_tab($courseid, $OUTPUT, $PAGE, $DB, $page, $perpage, $sort, $dir) {
+function local_automatic_badges_render_rules_tab($courseid, $OUTPUT, $PAGE, $DB, $page, $perpage, $sort, $dir) {
     // Add rule buttons: individual and global.
     $addruleurl = new moodle_url('/local/automatic_badges/add_rule.php', ['id' => $courseid]);
     $addglobalruleurl = new moodle_url('/local/automatic_badges/add_global_rule.php', ['id' => $courseid]);
@@ -484,7 +484,7 @@ function render_rules_tab($courseid, $OUTPUT, $PAGE, $DB, $page, $perpage, $sort
  * @param string $sort Sort column.
  * @param string $dir Sort direction.
  */
-function render_badges_tab($courseid, $OUTPUT, $DB, $page, $perpage, $sort, $dir) {
+function local_automatic_badges_render_badges_tab($courseid, $OUTPUT, $DB, $page, $perpage, $sort, $dir) {
     global $CFG;
 
     // Link to create new badge in Moodle.
@@ -604,7 +604,7 @@ function render_badges_tab($courseid, $OUTPUT, $DB, $page, $perpage, $sort, $dir
  * @param int $courseid The course ID.
  * @param \renderer_base $OUTPUT Moodle output renderer.
  */
-function render_templates_tab($courseid, $OUTPUT) {
+function local_automatic_badges_render_templates_tab($courseid, $OUTPUT) {
     echo html_writer::tag('h4', get_string('templates_title', 'local_automatic_badges'), ['class' => 'mb-3']);
     echo html_writer::tag('p', get_string('templates_description', 'local_automatic_badges'), ['class' => 'text-muted mb-4']);
 
@@ -693,7 +693,7 @@ function render_templates_tab($courseid, $OUTPUT) {
  * @param \renderer_base $OUTPUT Moodle output renderer.
  * @param \moodle_database $DB Moodle database object.
  */
-function render_history_tab($courseid, $OUTPUT, $DB) {
+function local_automatic_badges_render_history_tab($courseid, $OUTPUT, $DB) {
     echo html_writer::tag('h4', get_string('history_title', 'local_automatic_badges'), ['class' => 'mb-3']);
 
     // Quick stats.
@@ -787,7 +787,7 @@ function render_history_tab($courseid, $OUTPUT, $DB) {
  * @param \renderer_base $OUTPUT Moodle output renderer.
  * @param \moodle_database $DB Moodle database object.
  */
-function render_settings_tab($courseid, $OUTPUT, $DB) {
+function local_automatic_badges_render_settings_tab($courseid, $OUTPUT, $DB) {
     global $CFG;
     require_once($CFG->libdir . '/formslib.php');
 
@@ -880,7 +880,7 @@ function render_settings_tab($courseid, $OUTPUT, $DB) {
  * @param \moodle_page $PAGE Moodle page object.
  * @param \context $context Moodle context object.
  */
-function render_testlogic_tab($courseid, $OUTPUT, $DB, $PAGE, $context) {
+function local_automatic_badges_render_testlogic_tab($courseid, $OUTPUT, $DB, $PAGE, $context) {
     global $CFG;
     require_once($CFG->libdir . '/gradelib.php');
     require_once($CFG->dirroot . '/grade/querylib.php');
@@ -973,7 +973,7 @@ function render_testlogic_tab($courseid, $OUTPUT, $DB, $PAGE, $context) {
             $activityname = $cm ? format_string($cm->name) : $unknownlabel;
 
             // Get Real Grade.
-            $gradeinfo = _testlogic_get_grade($courseid, $userid, $cm);
+            $gradeinfo = local_automatic_badges_testlogic_get_grade($courseid, $userid, $cm);
             $isgradecriterion = in_array($rule->criterion_type, ['grade', 'forum_grade', 'grade_item']);
             if ($isgradecriterion) {
                 if (($rule->grade_operator ?? '>=') === 'range' && !empty($rule->grade_max)) {
@@ -1139,7 +1139,7 @@ function render_testlogic_tab($courseid, $OUTPUT, $DB, $PAGE, $context) {
  * @param \cm_info|null $cm The course module info.
  * @return mixed
  */
-function _testlogic_get_grade($courseid, $userid, $cm) {
+function local_automatic_badges_testlogic_get_grade($courseid, $userid, $cm) {
     if (!$cm) {
         return '-';
     }
