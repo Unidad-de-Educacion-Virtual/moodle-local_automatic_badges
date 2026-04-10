@@ -36,7 +36,6 @@ use external_value;
  * External function to save a badge design image and create the badge record.
  */
 class save_badge_design extends external_api {
-
     /**
      * Defines the parameters accepted by this external function.
      *
@@ -44,9 +43,9 @@ class save_badge_design extends external_api {
      */
     public static function execute_parameters(): external_function_parameters {
         return new external_function_parameters([
-            'courseid'    => new external_value(PARAM_INT,  'Course ID'),
-            'name'        => new external_value(PARAM_TEXT, 'Badge name'),
-            'imagedata'   => new external_value(PARAM_RAW,  'Base64 encoded image data URL'),
+            'courseid' => new external_value(PARAM_INT, 'Course ID'),
+            'name' => new external_value(PARAM_TEXT, 'Badge name'),
+            'imagedata' => new external_value(PARAM_RAW, 'Base64 encoded image data URL'),
             'description' => new external_value(PARAM_TEXT, 'Badge description', VALUE_DEFAULT, ''),
         ]);
     }
@@ -185,7 +184,7 @@ class save_badge_design extends external_api {
     public static function execute_returns(): external_single_structure {
         return new external_single_structure([
             'success' => new external_value(PARAM_BOOL, 'Whether the operation was successful'),
-            'badgeid' => new external_value(PARAM_INT,  'New badge ID', VALUE_OPTIONAL),
+            'badgeid' => new external_value(PARAM_INT, 'New badge ID', VALUE_OPTIONAL),
             'message' => new external_value(PARAM_TEXT, 'Status message'),
         ]);
     }

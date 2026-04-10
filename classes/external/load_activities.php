@@ -36,7 +36,6 @@ use external_value;
  * External function to load eligible activities filtered by criterion type and module name.
  */
 class load_activities extends external_api {
-
     /**
      * Defines the parameters accepted by this external function.
      *
@@ -44,9 +43,9 @@ class load_activities extends external_api {
      */
     public static function execute_parameters(): external_function_parameters {
         return new external_function_parameters([
-            'courseid'       => new external_value(PARAM_INT,          'Course ID'),
-            'criterion_type' => new external_value(PARAM_ALPHANUMEXT,  'Criterion type'),
-            'modname'        => new external_value(PARAM_ALPHA, 'Module name filter', VALUE_DEFAULT, ''),
+            'courseid' => new external_value(PARAM_INT, 'Course ID'),
+            'criterion_type' => new external_value(PARAM_ALPHANUMEXT, 'Criterion type'),
+            'modname' => new external_value(PARAM_ALPHA, 'Module name filter', VALUE_DEFAULT, ''),
         ]);
     }
 
@@ -102,7 +101,7 @@ class load_activities extends external_api {
     public static function execute_returns(): external_multiple_structure {
         return new external_multiple_structure(
             new external_single_structure([
-                'id'   => new external_value(PARAM_INT,  'Activity course module ID'),
+                'id' => new external_value(PARAM_INT, 'Activity course module ID'),
                 'name' => new external_value(PARAM_TEXT, 'Activity name'),
             ])
         );
