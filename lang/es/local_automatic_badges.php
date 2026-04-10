@@ -27,7 +27,6 @@ defined('MOODLE_INTERNAL') || die();
 
 // Nombre del plugin.
 $string['actions'] = 'Acciones';
-$string['badgedesigner'] = 'Diseñador de Insignias';
 $string['activitylinked'] = 'Actividad vinculada';
 $string['activitylinked_help'] = 'Selecciona la actividad que evaluará la regla. Solo se muestran actividades visibles.';
 $string['activitynoteligible'] = 'Selecciona una actividad que pueda otorgar insignias mediante calificaciones o entregas.';
@@ -38,6 +37,7 @@ $string['allowed_modules'] = 'Tipos de actividad permitidos';
 $string['allowed_modules_desc'] = 'Selecciona qué actividades se pueden usar al definir reglas.';
 $string['awardbadgestask'] = 'Tarea de otorgamiento automático de insignias';
 $string['awardmanually'] = 'Otorgar manualmente';
+$string['badgedesigner'] = 'Diseñador de Insignias';
 $string['badgenamecolumn'] = 'Insignia';
 $string['badgestatus'] = 'Estado de la insignia';
 $string['bonusvalue'] = 'Puntos extra';

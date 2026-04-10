@@ -33,7 +33,7 @@ define(['jquery', 'core/ajax'], function($, Ajax) {
      * @param {number} courseid The course ID.
      */
     var init = function(courseid) {
-        // fabric.js and Sortable.js are loaded as globals in the page head.
+        // Fabric.js and Sortable.js are loaded as globals in the page head.
         var fabric = window.fabric;
         var Sortable = window.Sortable;
 

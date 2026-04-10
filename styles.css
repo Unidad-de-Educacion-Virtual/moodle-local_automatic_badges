@@ -555,7 +555,9 @@ body.dark-mode .template-card {
 }
 
 /* Badge Designer */
-.badge-designer-container { min-height: 600px; }
+.badge-designer-container {
+    min-height: 600px;
+}
 .badge-section {
     border: 1px solid #e0e0e0;
     border-radius: 8px;
@@ -574,23 +576,66 @@ body.dark-mode .template-card {
     user-select: none;
     margin-bottom: 8px;
 }
-.badge-section-header .fa-chevron-down { transition: transform 0.2s; font-size: 0.7rem; }
-.badge-section.collapsed .badge-section-body { display: none; }
-.badge-section.collapsed .fa-chevron-down { transform: rotate(-90deg); }
-.shape-btn, .icon-btn, .deco-btn { min-width: 42px; min-height: 42px; padding: 6px; }
-.icon-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 4px; }
-.icon-grid .icon-btn { width: 100%; }
-.deco-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; }
+.badge-section-header .fa-chevron-down {
+    transition: transform 0.2s;
+    font-size: 0.7rem;
+}
+.badge-section.collapsed .badge-section-body {
+    display: none;
+}
+.badge-section.collapsed .fa-chevron-down {
+    transform: rotate(-90deg);
+}
+.shape-btn,
+.icon-btn,
+.deco-btn {
+    min-width: 42px;
+    min-height: 42px;
+    padding: 6px;
+}
+.icon-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 4px;
+}
+.icon-grid .icon-btn {
+    width: 100%;
+}
+.deco-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 4px;
+}
 .canvas-wrapper {
     border-radius: 12px;
     overflow: hidden;
     background: repeating-conic-gradient(#f0f0f0 0% 25%, #fff 0% 50%) 50% / 20px 20px;
 }
-.layer-item { border-radius: 6px; transition: background 0.15s; font-size: 0.85rem; }
-.layer-item:hover { background: #e9ecef; }
-.layer-item .layer-actions { opacity: 0; transition: opacity 0.15s; }
-.layer-item:hover .layer-actions { opacity: 1; }
-.control-slider { width: 100%; }
-.color-pair { display: flex; gap: 8px; }
-.color-pair > div { flex: 1; }
-.font-select { font-size: 0.85rem; }
+.layer-item {
+    border-radius: 6px;
+    transition: background 0.15s;
+    font-size: 0.85rem;
+}
+.layer-item:hover {
+    background: #e9ecef;
+}
+.layer-item .layer-actions {
+    opacity: 0;
+    transition: opacity 0.15s;
+}
+.layer-item:hover .layer-actions {
+    opacity: 1;
+}
+.control-slider {
+    width: 100%;
+}
+.color-pair {
+    display: flex;
+    gap: 8px;
+}
+.color-pair > div {
+    flex: 1;
+}
+.font-select {
+    font-size: 0.85rem;
+}

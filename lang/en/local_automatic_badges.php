@@ -27,7 +27,6 @@ defined('MOODLE_INTERNAL') || die();
 
 // Plugin name.
 $string['actions'] = 'Actions';
-$string['badgedesigner'] = 'Badge Designer';
 $string['activitylinked'] = 'Linked activity';
 $string['activitylinked_help'] = 'Select the activity that will be evaluated by the rule. Only visible activities are listed.';
 $string['activitynoteligible'] = 'Select an activity that can award badges through grades or submissions.';
@@ -38,6 +37,7 @@ $string['allowed_modules'] = 'Allowed activity types';
 $string['allowed_modules_desc'] = 'Select which activities can be used when defining rules.';
 $string['awardbadgestask'] = 'Automatic badges awarding task';
 $string['awardmanually'] = 'Award manually';
+$string['badgedesigner'] = 'Badge Designer';
 $string['badgenamecolumn'] = 'Badge';
 $string['badgestatus'] = 'Badge status';
 $string['bonusvalue'] = 'Bonus points';

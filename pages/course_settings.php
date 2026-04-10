@@ -915,8 +915,13 @@ function local_automatic_badges_render_testlogic_tab($courseid, $OUTPUT, $DB, $P
     foreach ($users as $u) {
         $selectoptions[$u->id] = fullname($u);
     }
-    echo html_writer::select($selectoptions, 'userid', $userid, false,
-        ['id' => 'testlogic-user-select', 'class' => 'custom-select w-100']);
+    echo html_writer::select(
+        $selectoptions,
+        'userid',
+        $userid,
+        false,
+        ['id' => 'testlogic-user-select', 'class' => 'custom-select w-100']
+    );
     echo html_writer::end_div();
     $btncontent = '<i class="fa fa-search mr-1"></i> Evaluar';
     echo html_writer::tag('button', $btncontent, ['type' => 'submit', 'class' => 'btn btn-primary btn-sm mb-0']);
