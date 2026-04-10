@@ -62,6 +62,32 @@ $templatecontext = [
 
 echo $OUTPUT->render_from_template('local_automatic_badges/badge_designer', $templatecontext);
 
-$PAGE->requires->js_call_amd('local_automatic_badges/badge_designer', 'init', [$courseid]);
+// Pass course ID and all translatable JS strings to the AMD module.
+$jscfg = [
+    'courseid' => $courseid,
+    'strings' => [
+        'layershape'    => get_string('designer_layer_shape', 'local_automatic_badges'),
+        'layericon'     => get_string('designer_layer_icon', 'local_automatic_badges'),
+        'layertext'     => get_string('designer_layer_text', 'local_automatic_badges'),
+        'layerimage'    => get_string('designer_layer_image', 'local_automatic_badges'),
+        'layerribbon'   => get_string('designer_layer_ribbon', 'local_automatic_badges'),
+        'layersunburst' => get_string('designer_layer_sunburst', 'local_automatic_badges'),
+        'layerwings'    => get_string('designer_layer_wings', 'local_automatic_badges'),
+        'layercrown'    => get_string('designer_layer_crown', 'local_automatic_badges'),
+        'layerlaurels'  => get_string('designer_layer_laurels', 'local_automatic_badges'),
+        'layerstars'    => get_string('designer_layer_stars', 'local_automatic_badges'),
+        'layerdots'     => get_string('designer_layer_dots', 'local_automatic_badges'),
+        'visibility'    => get_string('designer_layer_visibility', 'local_automatic_badges'),
+        'deletelayer'   => get_string('designer_layer_delete', 'local_automatic_badges'),
+        'imageonly'     => get_string('designer_image_only', 'local_automatic_badges'),
+        'imageadded'    => get_string('designer_image_added', 'local_automatic_badges', '{filename}'),
+        'nameRequired'  => get_string('designer_save_error_noname', 'local_automatic_badges'),
+        'saving'        => get_string('designer_save_loading', 'local_automatic_badges'),
+        'saveErrorConn' => get_string('designer_save_error_conn', 'local_automatic_badges'),
+        'saveErrorImg'  => get_string('designer_save_error_image', 'local_automatic_badges'),
+        'saveBtnLabel'  => get_string('designer_save_btn_label', 'local_automatic_badges'),
+    ],
+];
+$PAGE->requires->js_call_amd('local_automatic_badges/badge_designer', 'init', [$jscfg]);
 
 echo $OUTPUT->footer();

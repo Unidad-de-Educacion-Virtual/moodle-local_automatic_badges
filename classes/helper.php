@@ -374,12 +374,13 @@ class helper {
         $criterion = '';
         switch ($rule->criterion_type) {
             case 'forum':
-                $criterion = "Realizar " . ((int)($rule->forum_posts ?? 0)) . " publicaciones en el foro";
+                $criterion = get_string('notify_criterion_forum', 'local_automatic_badges', (int)($rule->forum_posts ?? 0));
                 break;
             case 'submission':
-                $criterion = "Realizar la entrega de la actividad";
                 if (!empty($rule->require_ontime)) {
-                    $criterion .= " a tiempo";
+                    $criterion = get_string('notify_criterion_submission_ontime', 'local_automatic_badges');
+                } else {
+                    $criterion = get_string('notify_criterion_submission', 'local_automatic_badges');
                 }
                 break;
             case 'grade':
@@ -388,23 +389,30 @@ class helper {
             default:
                 $op = $rule->grade_operator ?? '>=';
                 if ($op === 'range') {
-                    $criterion = "Obtener una calificación entre {$rule->grade_min}% y {$rule->grade_max}%";
+                    $criterion = get_string('notify_criterion_grade_range', 'local_automatic_badges', [
+                        'min' => $rule->grade_min,
+                        'max' => $rule->grade_max,
+                    ]);
+                } else if ($op === '>') {
+                    $criterion = get_string('notify_criterion_grade_gt', 'local_automatic_badges', $rule->grade_min);
                 } else {
-                    // Normalize >= text description realistically.
-                    $optext = ($op === '>') ? 'mayor a' : 'mayor o igual al';
-                    $criterion = "Obtener una calificación {$optext} {$rule->grade_min}%";
+                    $criterion = get_string('notify_criterion_grade_gte', 'local_automatic_badges', $rule->grade_min);
                 }
                 break;
         }
 
-        $style = "padding: 15px; border-left: 4px solid #007bff; background-color: #f8f9fa;";
-        $style .= " border-radius: 4px; margin-top:20px; font-family: sans-serif;";
-        $html = "<br><br><div style='" . $style . "'>";
-        $html .= "<h4 style='margin-top:0; color: #007bff; font-size: 16px;'>Detalles de Obtención</h4>";
-        $html .= "<p style='margin-bottom: 5px; font-size: 14px;'>";
-        $html .= "<strong>Actividad Asociada:</strong> " . format_string($cm->name) . "</p>";
-        $html .= "<p style='margin-bottom: 0; font-size: 14px;'><strong>Criterio Cumplido:</strong> " . $criterion . "</p>";
-        $html .= "</div>";
+        $style = 'padding: 15px; border-left: 4px solid #007bff; background-color: #f8f9fa;';
+        $style .= ' border-radius: 4px; margin-top:20px; font-family: sans-serif;';
+        $html = '<br><br><div style="' . $style . '">';
+        $html .= '<h4 style="margin-top:0; color: #007bff; font-size: 16px;">';
+        $html .= get_string('notify_detail_title', 'local_automatic_badges') . '</h4>';
+        $html .= '<p style="margin-bottom: 5px; font-size: 14px;">';
+        $html .= '<strong>' . get_string('notify_detail_activity', 'local_automatic_badges') . ':</strong> ';
+        $html .= format_string($cm->name) . '</p>';
+        $html .= '<p style="margin-bottom: 0; font-size: 14px;">';
+        $html .= '<strong>' . get_string('notify_detail_criterion', 'local_automatic_badges') . ':</strong> ';
+        $html .= $criterion . '</p>';
+        $html .= '</div>';
 
         return format_text($base, FORMAT_HTML) . $html;
     }

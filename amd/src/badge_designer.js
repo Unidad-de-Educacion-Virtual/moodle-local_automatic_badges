@@ -30,9 +30,14 @@ define(['jquery', 'core/ajax'], function($, Ajax) {
     /**
      * Initialise the badge designer canvas editor.
      *
-     * @param {number} courseid The course ID.
+     * @param {object} cfg Configuration object containing courseid and strings.
+     * @param {number} cfg.courseid The course ID.
+     * @param {object} cfg.strings Localised strings keyed by identifier.
      */
-    var init = function(courseid) {
+    var init = function(cfg) {
+        var courseid = cfg.courseid;
+        var strings = cfg.strings;
+
         // Fabric.js and Sortable.js are loaded as globals in the page head.
         var fabric = window.fabric;
         var Sortable = window.Sortable;
@@ -71,10 +76,11 @@ define(['jquery', 'core/ajax'], function($, Ajax) {
                         obj.name + '</span>' +
                         '<span class="layer-actions">' +
                         '<button type="button" class="btn btn-sm btn-link p-0 mx-1 layer-vis-btn ' +
-                        eyeColor + '" data-index="' + i + '" title="Visibilidad">' +
+                        eyeColor + '" data-index="' + i + '" title="' + strings.visibility + '">' +
                         '<i class="fa ' + eyeIcon + '"></i></button>' +
                         '<button type="button" class="btn btn-sm btn-link p-0 mx-1 text-danger layer-del-btn"' +
-                        ' data-index="' + i + '" title="Eliminar"><i class="fa fa-trash-alt"></i></button>' +
+                        ' data-index="' + i + '" title="' + strings.deletelayer + '">' +
+                        '<i class="fa fa-trash-alt"></i></button>' +
                         '</span></li>');
                     list.append(li);
                 }
@@ -237,7 +243,7 @@ define(['jquery', 'core/ajax'], function($, Ajax) {
             }
 
             shape.set('shadow', new fabric.Shadow({color: 'rgba(0,0,0,0.3)', blur: 15, offsetX: 5, offsetY: 5}));
-            shape.set({name: 'Forma Principal'});
+            shape.set({name: strings.layershape});
             bgShape = shape;
             canvas.add(shape);
 
@@ -368,8 +374,13 @@ define(['jquery', 'core/ajax'], function($, Ajax) {
 
                 if (newDecoObj) {
                     var decoNames = {
-                        'ribbon': 'Listón', 'sunburst': 'Resplandor', 'wings': 'Alas',
-                        'crown': 'Corona', 'laurels': 'Laureles', 'stars_around': 'Estrellas', 'dots': 'Puntos'
+                        'ribbon': strings.layerribbon,
+                        'sunburst': strings.layersunburst,
+                        'wings': strings.layerwings,
+                        'crown': strings.layercrown,
+                        'laurels': strings.layerlaurels,
+                        'stars_around': strings.layerstars,
+                        'dots': strings.layerdots
                     };
                     newDecoObj.set({name: decoNames[type]});
                     activeDecos[type] = newDecoObj;
@@ -413,7 +424,7 @@ define(['jquery', 'core/ajax'], function($, Ajax) {
                 originY: 'center',
                 textBaseline: 'bottom',
                 selectable: true,
-                name: 'Ícono Central'
+                name: strings.layericon
             });
             canvas.add(iconObj);
             if (oldIndex !== -1) {
@@ -442,7 +453,7 @@ define(['jquery', 'core/ajax'], function($, Ajax) {
                 textAlign: 'center',
                 textBaseline: 'bottom',
                 selectable: true,
-                name: 'Texto Principal'
+                name: strings.layertext
             });
             canvas.add(textObj);
             if (oldIndex !== -1) {
@@ -634,7 +645,7 @@ define(['jquery', 'core/ajax'], function($, Ajax) {
             }
             if (!file.type.match(/^image\//)) {
                 // eslint-disable-next-line no-alert
-                alert('Solo se permiten archivos de imagen (PNG, JPG, GIF, SVG, etc.).');
+                alert(strings.imageonly);
                 return;
             }
             var reader = new FileReader();
@@ -650,13 +661,13 @@ define(['jquery', 'core/ajax'], function($, Ajax) {
                         originX: 'center',
                         originY: 'center',
                         selectable: true,
-                        name: 'Imagen ' + imageCount
+                        name: strings.layerimage + ' ' + imageCount
                     });
                     canvas.add(img);
                     canvas.setActiveObject(img);
                     canvas.renderAll();
                     updateLayersPanel();
-                    $('#badge_img_feedback').text('Imagen "' + file.name + '" añadida al lienzo.').show();
+                    $('#badge_img_feedback').text(strings.imageadded.replace('{filename}', file.name)).show();
                     setTimeout(function() {
                         $('#badge_img_feedback').hide();
                     }, 3000);
@@ -672,10 +683,10 @@ define(['jquery', 'core/ajax'], function($, Ajax) {
             var name = $('#badge_text').val();
             if (!name) {
                 // eslint-disable-next-line no-alert
-                alert('Nombre requerido');
+                alert(strings.nameRequired);
                 return;
             }
-            btn.prop('disabled', true).text('Guardando...');
+            btn.prop('disabled', true).text(strings.saving);
 
             try {
                 canvas.discardActiveObject().renderAll();
@@ -699,14 +710,14 @@ define(['jquery', 'core/ajax'], function($, Ajax) {
                     return r;
                 }).catch(function() {
                     // eslint-disable-next-line no-alert
-                    alert('Error de conexión al guardar.');
-                    btn.prop('disabled', false).html('<i class="fa fa-save"></i> Guardar Insignia');
+                    alert(strings.saveErrorConn);
+                    btn.prop('disabled', false).html('<i class="fa fa-save"></i> ' + strings.saveBtnLabel);
                 });
             } catch (e) {
                 window.console.error(e);
                 // eslint-disable-next-line no-alert
-                alert('Error procesando imagen');
-                btn.prop('disabled', false).html('<i class="fa fa-save"></i> Guardar Insignia');
+                alert(strings.saveErrorImg);
+                btn.prop('disabled', false).html('<i class="fa fa-save"></i> ' + strings.saveBtnLabel);
             }
         });
 

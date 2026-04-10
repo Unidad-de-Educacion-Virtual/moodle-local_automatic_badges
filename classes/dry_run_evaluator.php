@@ -316,13 +316,16 @@ class dry_run_evaluator {
             }
 
             if (isset($users[$rec->userid])) {
-                $statusstr = ($subtype === 'ontime' ? 'A tiempo' : ($subtype === 'early' ? 'Temprana' : 'Entregada'));
+                $statusstr = get_string('submission_status_' . $subtype, 'local_automatic_badges');
                 // Append the localized Moodle date.
                 $datestr = userdate($rec->timemodified, get_string('strftimedatetimeshort', 'core_langconfig'));
 
-                $detail = $statusstr . ' el ' . $datestr;
+                $detail = get_string('submission_datedetail', 'local_automatic_badges', [
+                    'status' => $statusstr,
+                    'date' => $datestr,
+                ]);
                 if (isset($rec->grade)) {
-                    $detail .= ' (Nota: ' . round($rec->grade, 2) . ')';
+                    $detail .= ' ' . get_string('submission_gradedetail', 'local_automatic_badges', round($rec->grade, 2));
                 }
 
                 $eligible[$rec->userid] = (object)[

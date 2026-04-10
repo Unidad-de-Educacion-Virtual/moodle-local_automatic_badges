@@ -49,7 +49,7 @@ if ($hassiteconfig) {
             'local_automatic_badges/default_notify_message',
             get_string('default_notify_message', 'local_automatic_badges'),
             get_string('default_notify_message_desc', 'local_automatic_badges'),
-            '¡Felicidades! Has recibido una nueva insignia.'
+            get_string('coursesettings_default_notify_value', 'local_automatic_badges')
         )
     );
 

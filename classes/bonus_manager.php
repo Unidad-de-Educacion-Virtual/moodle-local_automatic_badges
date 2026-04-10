@@ -40,11 +40,17 @@ require_once($GLOBALS['CFG']->libdir . '/grade/grade_item.php');
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class bonus_manager {
-    /** @var string Category name used in the gradebook */
-    const CATEGORY_NAME = 'Bonificaciones (Auto Badges)';
+    /**
+     * Returns the localised gradebook category name used for bonus grades.
+     *
+     * @return string
+     */
+    public static function get_category_name(): string {
+        return get_string('bonuscategoryname', 'local_automatic_badges');
+    }
 
     /**
-     * Ensures the "Bonificaciones" grade category exists for the course.
+     * Ensures the bonus grade category exists for the course.
      *
      * @param int $courseid The course ID.
      * @return \grade_category The grade category object.
@@ -53,7 +59,7 @@ class bonus_manager {
         // Try to find existing category by name and course.
         $existing = \grade_category::fetch_all([
             'courseid' => $courseid,
-            'fullname' => self::CATEGORY_NAME,
+            'fullname' => self::get_category_name(),
         ]);
 
         if ($existing) {
@@ -63,7 +69,7 @@ class bonus_manager {
         // Create new category.
         $category = new \grade_category();
         $category->courseid = $courseid;
-        $category->fullname = self::CATEGORY_NAME;
+        $category->fullname = self::get_category_name();
         $category->aggregation = GRADE_AGGREGATE_SUM; // Natural aggregation.
         $category->aggregateonlygraded = 1;
         $category->insert('local_automatic_badges');

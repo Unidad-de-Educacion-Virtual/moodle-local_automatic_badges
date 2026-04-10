@@ -31,73 +31,87 @@
 
     <!-- Panel de Controles -->
     <div class="col-md-4 p-3" style="max-height: 85vh; overflow-y: auto;">
-        <h5 class="mb-3 text-primary"><i class="fa fa-paint-brush"></i> Personalización</h5>
+        <h5 class="mb-3 text-primary">
+            <i class="fa fa-paint-brush"></i> {{#str}}designer_personalization, local_automatic_badges{{/str}}
+        </h5>
 
         <!-- Nombre -->
         <div class="badge-section">
             <div class="badge-section-header">
-                <span><i class="fa fa-font mr-1"></i> Nombre de la Insignia</span>
+                <span>
+                    <i class="fa fa-font mr-1"></i>
+                    {{#str}}designer_badge_name, local_automatic_badges{{/str}}
+                </span>
                 <i class="fa fa-chevron-down"></i>
             </div>
             <div class="badge-section-body">
-                <input type="text" id="badge_text" class="form-control" value="Campeón"
-                       placeholder="Nombre de la insignia">
+                <input type="text" id="badge_text" class="form-control"
+                       value="{{#str}}designer_badge_name_default, local_automatic_badges{{/str}}"
+                       placeholder="{{#str}}designer_badge_name_placeholder, local_automatic_badges{{/str}}">
             </div>
         </div>
 
         <!-- Forma Principal -->
         <div class="badge-section">
             <div class="badge-section-header">
-                <span><i class="fa fa-shapes mr-1"></i> Forma Principal</span>
+                <span>
+                    <i class="fa fa-shapes mr-1"></i>
+                    {{#str}}designer_shape_main, local_automatic_badges{{/str}}
+                </span>
                 <i class="fa fa-chevron-down"></i>
             </div>
             <div class="badge-section-body">
                 <div class="d-flex flex-wrap mb-2" style="gap:4px;">
-                    <button type="button" class="btn btn-primary shape-btn" data-shape="circle" title="Círculo">
+                    <button type="button" class="btn btn-primary shape-btn" data-shape="circle"
+                            title="{{#str}}designer_shape_circle, local_automatic_badges{{/str}}">
                         <i class="fa fa-circle fa-lg"></i>
                     </button>
                     <button type="button" class="btn btn-outline-primary shape-btn" data-shape="square"
-                            title="Cuadrado">
+                            title="{{#str}}designer_shape_square, local_automatic_badges{{/str}}">
                         <i class="fa fa-square fa-lg"></i>
                     </button>
                     <button type="button" class="btn btn-outline-primary shape-btn" data-shape="hexagon"
-                            title="Hexágono">
+                            title="{{#str}}designer_shape_hexagon, local_automatic_badges{{/str}}">
                         <i class="fa fa-cube fa-lg"></i>
                     </button>
                     <button type="button" class="btn btn-outline-primary shape-btn" data-shape="shield"
-                            title="Escudo">
+                            title="{{#str}}designer_shape_shield, local_automatic_badges{{/str}}">
                         <i class="fa fa-shield-alt fa-lg"></i>
                     </button>
                     <button type="button" class="btn btn-outline-primary shape-btn" data-shape="star"
-                            title="Estrella">
+                            title="{{#str}}designer_shape_star, local_automatic_badges{{/str}}">
                         <i class="fa fa-star fa-lg"></i>
                     </button>
                     <button type="button" class="btn btn-outline-primary shape-btn" data-shape="diamond"
-                            title="Diamante">
+                            title="{{#str}}designer_shape_diamond, local_automatic_badges{{/str}}">
                         <i class="fa fa-gem fa-lg"></i>
                     </button>
                     <button type="button" class="btn btn-outline-primary shape-btn" data-shape="oval"
-                            title="Óvalo">
+                            title="{{#str}}designer_shape_oval, local_automatic_badges{{/str}}">
                         <i class="fa fa-egg fa-lg"></i>
                     </button>
                     <button type="button" class="btn btn-outline-primary shape-btn" data-shape="pentagon"
-                            title="Pentágono">
+                            title="{{#str}}designer_shape_pentagon, local_automatic_badges{{/str}}">
                         <span style="font-size:1.3em;line-height:1">&#x2B20;</span>
                     </button>
                     <button type="button" class="btn btn-outline-primary shape-btn" data-shape="heart"
-                            title="Corazón">
+                            title="{{#str}}designer_shape_heart, local_automatic_badges{{/str}}">
                         <i class="fa fa-heart fa-lg"></i>
                     </button>
                 </div>
 
                 <div class="color-pair mt-2">
                     <div>
-                        <label class="small text-muted mb-1">Color Fondo</label>
+                        <label class="small text-muted mb-1">
+                            {{#str}}designer_color_bg, local_automatic_badges{{/str}}
+                        </label>
                         <input type="color" id="badge_color_bg" class="form-control p-1"
                                style="height: 38px;" value="#0f6cbf">
                     </div>
                     <div>
-                        <label class="small text-muted mb-1">Color Borde</label>
+                        <label class="small text-muted mb-1">
+                            {{#str}}designer_color_border, local_automatic_badges{{/str}}
+                        </label>
                         <input type="color" id="badge_color_border" class="form-control p-1"
                                style="height: 38px;" value="#FFD700">
                     </div>
@@ -105,13 +119,17 @@
 
                 <div class="mt-2">
                     <label class="small text-muted mb-1">
-                        Grosor del Borde: <span id="border_width_val">8</span>px
+                        {{#str}}designer_border_width, local_automatic_badges{{/str}}
+                        <span id="border_width_val">8</span>px
                     </label>
                     <input type="range" id="badge_border_width" class="control-slider" min="0" max="20" value="8">
                 </div>
 
                 <div class="mt-2">
-                    <label class="small text-muted mb-1">Opacidad: <span id="opacity_val">100</span>%</label>
+                    <label class="small text-muted mb-1">
+                        {{#str}}designer_opacity, local_automatic_badges{{/str}}
+                        <span id="opacity_val">100</span>%
+                    </label>
                     <input type="range" id="badge_opacity" class="control-slider" min="10" max="100" value="100">
                 </div>
             </div>
@@ -120,84 +138,106 @@
         <!-- Ícono Central -->
         <div class="badge-section">
             <div class="badge-section-header">
-                <span><i class="fa fa-icons mr-1"></i> Ícono Central</span>
+                <span>
+                    <i class="fa fa-icons mr-1"></i>
+                    {{#str}}designer_central_icon, local_automatic_badges{{/str}}
+                </span>
                 <i class="fa fa-chevron-down"></i>
             </div>
             <div class="badge-section-body">
                 <div class="icon-grid mb-2">
-                    <button type="button" class="btn btn-primary icon-btn" data-icon="&#xf091;" title="Trofeo">
+                    <button type="button" class="btn btn-primary icon-btn" data-icon="&#xf091;"
+                            title="{{#str}}designer_icon_trophy, local_automatic_badges{{/str}}">
                         <i class="fa fa-trophy fa-lg"></i>
                     </button>
                     <button type="button" class="btn btn-outline-secondary icon-btn"
-                            data-icon="&#xf005;" title="Estrella">
+                            data-icon="&#xf005;"
+                            title="{{#str}}designer_icon_star, local_automatic_badges{{/str}}">
                         <i class="fa fa-star fa-lg"></i>
                     </button>
                     <button type="button" class="btn btn-outline-secondary icon-btn"
-                            data-icon="&#xf0a3;" title="Certificado">
+                            data-icon="&#xf0a3;"
+                            title="{{#str}}designer_icon_certificate, local_automatic_badges{{/str}}">
                         <i class="fa fa-certificate fa-lg"></i>
                     </button>
                     <button type="button" class="btn btn-outline-secondary icon-btn"
-                            data-icon="&#xf19d;" title="Birrete">
+                            data-icon="&#xf19d;"
+                            title="{{#str}}designer_icon_graduation, local_automatic_badges{{/str}}">
                         <i class="fa fa-graduation-cap fa-lg"></i>
                     </button>
                     <button type="button" class="btn btn-outline-secondary icon-btn"
-                            data-icon="&#xf0e7;" title="Rayo">
+                            data-icon="&#xf0e7;"
+                            title="{{#str}}designer_icon_bolt, local_automatic_badges{{/str}}">
                         <i class="fa fa-bolt fa-lg"></i>
                     </button>
                     <button type="button" class="btn btn-outline-secondary icon-btn"
-                            data-icon="&#xf00c;" title="Check">
+                            data-icon="&#xf00c;"
+                            title="{{#str}}designer_icon_check, local_automatic_badges{{/str}}">
                         <i class="fa fa-check fa-lg"></i>
                     </button>
                     <button type="button" class="btn btn-outline-secondary icon-btn"
-                            data-icon="&#xf0eb;" title="Bombilla">
+                            data-icon="&#xf0eb;"
+                            title="{{#str}}designer_icon_lightbulb, local_automatic_badges{{/str}}">
                         <i class="fa fa-lightbulb fa-lg"></i>
                     </button>
                     <button type="button" class="btn btn-outline-secondary icon-btn"
-                            data-icon="&#xf521;" title="Corona">
+                            data-icon="&#xf521;"
+                            title="{{#str}}designer_icon_crown, local_automatic_badges{{/str}}">
                         <i class="fa fa-crown fa-lg"></i>
                     </button>
                     <button type="button" class="btn btn-outline-secondary icon-btn"
-                            data-icon="&#xf06d;" title="Fuego">
+                            data-icon="&#xf06d;"
+                            title="{{#str}}designer_icon_fire, local_automatic_badges{{/str}}">
                         <i class="fa fa-fire fa-lg"></i>
                     </button>
                     <button type="button" class="btn btn-outline-secondary icon-btn"
-                            data-icon="&#xf5a2;" title="Medalla">
+                            data-icon="&#xf5a2;"
+                            title="{{#str}}designer_icon_medal, local_automatic_badges{{/str}}">
                         <i class="fa fa-medal fa-lg"></i>
                     </button>
                     <button type="button" class="btn btn-outline-secondary icon-btn"
-                            data-icon="&#xf02d;" title="Libro">
+                            data-icon="&#xf02d;"
+                            title="{{#str}}designer_icon_book, local_automatic_badges{{/str}}">
                         <i class="fa fa-book fa-lg"></i>
                     </button>
                     <button type="button" class="btn btn-outline-secondary icon-btn"
-                            data-icon="&#xf001;" title="Música">
+                            data-icon="&#xf001;"
+                            title="{{#str}}designer_icon_music, local_automatic_badges{{/str}}">
                         <i class="fa fa-music fa-lg"></i>
                     </button>
                     <button type="button" class="btn btn-outline-secondary icon-btn"
-                            data-icon="&#xf013;" title="Engranaje">
+                            data-icon="&#xf013;"
+                            title="{{#str}}designer_icon_cog, local_automatic_badges{{/str}}">
                         <i class="fa fa-cog fa-lg"></i>
                     </button>
                     <button type="button" class="btn btn-outline-secondary icon-btn"
-                            data-icon="&#xf164;" title="Pulgar Arriba">
+                            data-icon="&#xf164;"
+                            title="{{#str}}designer_icon_thumbsup, local_automatic_badges{{/str}}">
                         <i class="fa fa-thumbs-up fa-lg"></i>
                     </button>
                     <button type="button" class="btn btn-outline-secondary icon-btn"
-                            data-icon="&#xf135;" title="Cohete">
+                            data-icon="&#xf135;"
+                            title="{{#str}}designer_icon_rocket, local_automatic_badges{{/str}}">
                         <i class="fa fa-rocket fa-lg"></i>
                     </button>
                     <button type="button" class="btn btn-outline-secondary icon-btn"
-                            data-icon="&#xf3a5;" title="Diamante">
+                            data-icon="&#xf3a5;"
+                            title="{{#str}}designer_icon_diamond, local_automatic_badges{{/str}}">
                         <i class="fa fa-gem fa-lg"></i>
                     </button>
                     <button type="button" class="btn btn-outline-secondary icon-btn"
-                            data-icon="&#xf024;" title="Bandera">
+                            data-icon="&#xf024;"
+                            title="{{#str}}designer_icon_flag, local_automatic_badges{{/str}}">
                         <i class="fa fa-flag fa-lg"></i>
                     </button>
                     <button type="button" class="btn btn-outline-secondary icon-btn"
-                            data-icon="&#xf084;" title="Llave">
+                            data-icon="&#xf084;"
+                            title="{{#str}}designer_icon_key, local_automatic_badges{{/str}}">
                         <i class="fa fa-key fa-lg"></i>
                     </button>
                     <button type="button" class="btn btn-outline-secondary icon-btn"
-                            data-icon="&#xf0f3;" title="Campana">
+                            data-icon="&#xf0f3;"
+                            title="{{#str}}designer_icon_bell, local_automatic_badges{{/str}}">
                         <i class="fa fa-bell fa-lg"></i>
                     </button>
                 </div>
@@ -205,12 +245,16 @@
 
                 <div class="color-pair mt-2">
                     <div>
-                        <label class="small text-muted mb-1">Color Ícono</label>
+                        <label class="small text-muted mb-1">
+                            {{#str}}designer_color_icon, local_automatic_badges{{/str}}
+                        </label>
                         <input type="color" id="badge_color_icon" class="form-control p-1"
                                style="height: 38px;" value="#FFFFFF">
                     </div>
                     <div>
-                        <label class="small text-muted mb-1">Color Texto</label>
+                        <label class="small text-muted mb-1">
+                            {{#str}}designer_color_text, local_automatic_badges{{/str}}
+                        </label>
                         <input type="color" id="badge_color_text" class="form-control p-1"
                                style="height: 38px;" value="#FFFFFF">
                     </div>
@@ -221,13 +265,19 @@
         <!-- Imagen Personalizada -->
         <div class="badge-section">
             <div class="badge-section-header">
-                <span><i class="fa fa-image mr-1"></i> Imagen Personalizada</span>
+                <span>
+                    <i class="fa fa-image mr-1"></i>
+                    {{#str}}designer_image_custom, local_automatic_badges{{/str}}
+                </span>
                 <i class="fa fa-chevron-down"></i>
             </div>
             <div class="badge-section-body">
-                <p class="small text-muted mb-2">Sube tu propia imagen (PNG, JPG, SVG) para añadirla al lienzo.</p>
+                <p class="small text-muted mb-2">
+                    {{#str}}designer_image_hint, local_automatic_badges{{/str}}
+                </p>
                 <label class="btn btn-outline-secondary btn-block" style="cursor:pointer;">
-                    <i class="fa fa-upload mr-1"></i> Seleccionar imagen...
+                    <i class="fa fa-upload mr-1"></i>
+                    {{#str}}designer_image_select, local_automatic_badges{{/str}}
                     <input type="file" id="badge_img_upload" accept="image/*" style="display:none;">
                 </label>
                 <div id="badge_img_feedback" class="small text-muted mt-1" style="display:none;"></div>
@@ -237,7 +287,10 @@
         <!-- Fuente del Texto -->
         <div class="badge-section">
             <div class="badge-section-header">
-                <span><i class="fa fa-text-height mr-1"></i> Fuente del Texto</span>
+                <span>
+                    <i class="fa fa-text-height mr-1"></i>
+                    {{#str}}designer_font, local_automatic_badges{{/str}}
+                </span>
                 <i class="fa fa-chevron-down"></i>
             </div>
             <div class="badge-section-body">
@@ -253,7 +306,8 @@
                 </select>
                 <div class="mt-2">
                     <label class="small text-muted mb-1">
-                        Tamaño: <span id="font_size_val">26</span>px
+                        {{#str}}designer_fontsize, local_automatic_badges{{/str}}
+                        <span id="font_size_val">26</span>px
                     </label>
                     <input type="range" id="badge_font_size" class="control-slider" min="10" max="60" value="26">
                 </div>
@@ -263,41 +317,46 @@
         <!-- Decoraciones -->
         <div class="badge-section">
             <div class="badge-section-header">
-                <span><i class="fa fa-magic mr-1"></i> Decoraciones</span>
+                <span>
+                    <i class="fa fa-magic mr-1"></i>
+                    {{#str}}designer_decorations, local_automatic_badges{{/str}}
+                </span>
                 <i class="fa fa-chevron-down"></i>
             </div>
             <div class="badge-section-body">
                 <div class="deco-grid mb-2">
                     <button type="button" class="btn btn-outline-primary deco-btn" data-deco="ribbon"
-                            title="Listón Inferior">
+                            title="{{#str}}designer_deco_ribbon, local_automatic_badges{{/str}}">
                         <i class="fa fa-bookmark fa-lg"></i>
                     </button>
                     <button type="button" class="btn btn-outline-primary deco-btn" data-deco="sunburst"
-                            title="Resplandor">
+                            title="{{#str}}designer_deco_sunburst, local_automatic_badges{{/str}}">
                         <i class="fa fa-sun fa-lg"></i>
                     </button>
                     <button type="button" class="btn btn-outline-primary deco-btn" data-deco="wings"
-                            title="Alas">
+                            title="{{#str}}designer_deco_wings, local_automatic_badges{{/str}}">
                         <i class="fa fa-dove fa-lg"></i>
                     </button>
                     <button type="button" class="btn btn-outline-primary deco-btn" data-deco="crown"
-                            title="Corona Superior">
+                            title="{{#str}}designer_deco_crown, local_automatic_badges{{/str}}">
                         <i class="fa fa-crown fa-lg"></i>
                     </button>
                     <button type="button" class="btn btn-outline-primary deco-btn" data-deco="laurels"
-                            title="Laureles">
+                            title="{{#str}}designer_deco_laurels, local_automatic_badges{{/str}}">
                         <i class="fa fa-leaf fa-lg"></i>
                     </button>
                     <button type="button" class="btn btn-outline-primary deco-btn" data-deco="stars_around"
-                            title="Estrellas">
+                            title="{{#str}}designer_deco_stars, local_automatic_badges{{/str}}">
                         <i class="fa fa-star-of-life fa-lg"></i>
                     </button>
                     <button type="button" class="btn btn-outline-primary deco-btn" data-deco="dots"
-                            title="Puntos Decorativos">
+                            title="{{#str}}designer_deco_dots, local_automatic_badges{{/str}}">
                         <i class="fa fa-circle-notch fa-lg"></i>
                     </button>
                 </div>
-                <label class="small text-muted mb-1">Color de Decoraciones</label>
+                <label class="small text-muted mb-1">
+                    {{#str}}designer_color_deco, local_automatic_badges{{/str}}
+                </label>
                 <input type="color" id="badge_color_deco" class="form-control p-1"
                        style="height: 38px;" value="#D4AF37">
             </div>
@@ -305,9 +364,11 @@
 
         <hr>
         <button id="btn_save_badge" class="btn btn-primary btn-lg btn-block shadow">
-            <i class="fa fa-save"></i> Guardar Insignia
+            <i class="fa fa-save"></i> {{#str}}designer_save, local_automatic_badges{{/str}}
         </button>
-        <a href="{{cancelurl}}" class="btn btn-outline-secondary btn-block">Cancelar</a>
+        <a href="{{cancelurl}}" class="btn btn-outline-secondary btn-block">
+            {{#str}}cancel, core{{/str}}
+        </a>
     </div>
 
     <!-- Lienzo -->
@@ -316,29 +377,32 @@
             <canvas id="c" width="400" height="400"></canvas>
             <div class="position-absolute" style="top:10px; right:10px; display:flex; gap:4px;">
                 <button type="button" class="btn btn-sm btn-light border shadow-sm" id="btn_center_all"
-                        title="Centrar todo">
+                        title="{{#str}}designer_center_all, local_automatic_badges{{/str}}">
                     <i class="fa fa-crosshairs"></i>
                 </button>
                 <button type="button" class="btn btn-sm btn-light border shadow-sm"
-                        id="btn_delete_selected" title="Eliminar seleccionado">
+                        id="btn_delete_selected"
+                        title="{{#str}}designer_delete_selected, local_automatic_badges{{/str}}">
                     <i class="fa fa-trash text-danger"></i>
                 </button>
             </div>
         </div>
         <div class="mt-3 text-muted text-center small">
             <i class="fa fa-info-circle text-primary"></i>
-            Clic en elementos para moverlos. Usa las esquinas para redimensionar.
+            {{#str}}designer_canvas_hint, local_automatic_badges{{/str}}
         </div>
     </div>
 
     <!-- Capas -->
     <div class="col-md-3 p-3" style="max-height: 85vh; overflow-y: auto;">
-        <h5 class="mb-3 text-primary"><i class="fa fa-layer-group"></i> Capas</h5>
+        <h5 class="mb-3 text-primary">
+            <i class="fa fa-layer-group"></i> {{#str}}designer_layers, local_automatic_badges{{/str}}
+        </h5>
         <ul id="layers_list" class="list-group layer-list" style="cursor: grab;">
             <!-- Elementos generados dinámicamente -->
         </ul>
         <div class="mt-3 small text-muted">
-            <i class="fa fa-arrows-alt-v"></i> Arrastra para ordenar las capas.
+            <i class="fa fa-arrows-alt-v"></i> {{#str}}designer_layers_hint, local_automatic_badges{{/str}}
         </div>
     </div>
 
