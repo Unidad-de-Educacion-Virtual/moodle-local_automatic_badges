@@ -514,38 +514,38 @@ require(['jquery'], function($) {
             listContainer.html('<div class="p-3 text-center"><i class="fa fa-circle-o-notch fa-spin"></i> ' +
                 'Cargando actividades...</div>');
 
-            $.ajax({
-                url: M.cfg.wwwroot + '/local/automatic_badges/ajax/load_activities.php',
-                data: {
-                    courseid: courseid,
-                    criterion_type: criterion,
-                    modname: modType,
-                    format: 'json'
-                },
-                dataType: 'json',
-                success: function(data) {
+            require(['core/ajax'], function(Ajax) {
+                Ajax.call([{
+                    methodname: 'local_automatic_badges_load_activities',
+                    args: {
+                        courseid: courseid,
+                        criterion_type: criterion,
+                        modname: modType
+                    }
+                }])[0].then(function(data) {
                     listContainer.empty();
-                    if (!data || Object.keys(data).length === 0) {
+                    if (!data || data.length === 0) {
                         listContainer.append('<div class="local-automatic-badges-activity-selection__empty">' +
                             'No se encontraron actividades elegibles de este tipo.</div>');
                         updateSubmitCount();
-                        return;
+                        return data;
                     }
 
-                    $.each(data, function(id, name) {
+                    $.each(data, function(i, activity) {
                         var item = $('<div class="local-automatic-badges-activity-selection__item"></div>');
-                        var checkbox = $('<input type="checkbox" value="' + id + '" id="global_act_' + id + '" checked>');
-                        var label = $('<label for="global_act_' + id + '">' + name + '</label>');
+                        var checkbox = $('<input type="checkbox" value="' + activity.id +
+                            '" id="global_act_' + activity.id + '" checked>');
+                        var label = $('<label for="global_act_' + activity.id + '">' + activity.name + '</label>');
                         item.append(checkbox).append(label);
                         listContainer.append(item);
                         checkbox.on('change', updateSubmitCount);
                     });
 
                     updateSubmitCount();
-                },
-                error: function() {
+                    return data;
+                }).catch(function() {
                     listContainer.html('<div class="alert alert-danger">Error al cargar actividades.</div>');
-                }
+                });
             });
         }
 

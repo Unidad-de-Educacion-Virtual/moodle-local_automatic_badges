@@ -159,17 +159,15 @@ require(["jquery"], function($) {
             const dataURL = canvas.toDataURL({format: "png", multiplier: 2});
             dlog("DataURL created...");
 
-            $.ajax({
-                url: M.cfg.wwwroot + "/local/automatic_badges/ajax/save_badge_design.php",
-                type: "POST",
-                data: {
-                    courseid: '.$courseid.',
-                    sesskey: M.cfg.sesskey,
-                    name: name,
-                    imagedata: dataURL
-                },
-                dataType: "json",
-                success: function(r) {
+            require(['core/ajax'], function(Ajax) {
+                Ajax.call([{
+                    methodname: 'local_automatic_badges_save_badge_design',
+                    args: {
+                        courseid: '.$courseid.',
+                        name: name,
+                        imagedata: dataURL
+                    }
+                }])[0].then(function(r) {
                     if (r.success) {
                         window.location.href = M.cfg.wwwroot +
                             "/local/automatic_badges/course_settings.php?id='.$courseid.'&tab=badges";
@@ -178,13 +176,13 @@ require(["jquery"], function($) {
                         alert(r.message);
                         btn.prop("disabled", false).text("Guardar Insignia");
                     }
-                },
-                error: function(err) {
+                    return r;
+                }).catch(function(err) {
                     dlog("Error ajax: " + JSON.stringify(err));
                     // eslint-disable-next-line no-alert
                     alert("Error de conexión al guardar.");
                     btn.prop("disabled", false).text("Guardar Insignia");
-                }
+                });
             });
         } catch (e) {
             dlog("Error in save: " + e.message);

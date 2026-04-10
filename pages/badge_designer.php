@@ -969,28 +969,26 @@ $(function() {
             canvas.discardActiveObject().renderAll();
             const dataURL = canvas.toDataURL({ format: "png", multiplier: 2 });
 
-            $.ajax({
-                url: M.cfg.wwwroot + "/local/automatic_badges/ajax/save_badge_design.php",
-                type: "POST",
-                data: {
-                    courseid: {$courseid},
-                    sesskey: M.cfg.sesskey,
-                    name: name,
-                    imagedata: dataURL
-                },
-                dataType: "json",
-                success: function(r) {
+            require(['core/ajax'], function(Ajax) {
+                Ajax.call([{
+                    methodname: 'local_automatic_badges_save_badge_design',
+                    args: {
+                        courseid: {$courseid},
+                        name: name,
+                        imagedata: dataURL
+                    }
+                }])[0].then(function(r) {
                     if (r.success) {
                         window.location.href = M.cfg.wwwroot + "/badges/edit.php?id=" + r.badgeid + "&action=badge";
                     } else {
                         alert(r.message);
                         btn.prop("disabled", false).html('<i class="fa fa-save"></i> Guardar Insignia');
                     }
-                },
-                error: function() {
+                    return r;
+                }).catch(function() {
                     alert("Error de conexión al guardar.");
                     btn.prop("disabled", false).html('<i class="fa fa-save"></i> Guardar Insignia');
-                }
+                });
             });
         } catch(e) {
             console.error(e);
