@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<libraries>
+    <library>
+        <location>css/fontawesome.min.css</location>
+        <name>Font Awesome Free</name>
+        <version>6.4.0</version>
+        <license>MIT, SIL OFL 1.1, CC BY 4.0</license>
+        <licenseversion></licenseversion>
+    </library>
+    <library>
+        <location>webfonts</location>
+        <name>Font Awesome Free (webfonts)</name>
+        <version>6.4.0</version>
+        <license>SIL OFL 1.1</license>
+        <licenseversion>1.1</licenseversion>
+    </library>
+    <library>
+        <location>js/fabric.min.js</location>
+        <name>Fabric.js</name>
+        <version>5.3.0</version>
+        <license>MIT</license>
+        <licenseversion></licenseversion>
+    </library>
+    <library>
+        <location>js/Sortable.min.js</location>
+        <name>SortableJS</name>
+        <version>1.15.0</version>
+        <license>MIT</license>
+        <licenseversion></licenseversion>
+    </library>
+</libraries>
