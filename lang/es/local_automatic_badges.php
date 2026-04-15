@@ -27,6 +27,7 @@ defined('MOODLE_INTERNAL') || die();
 
 // Nombre del plugin.
 $string['actions'] = 'Acciones';
+$string['automatic_badges:manage'] = 'Gestionar insignias automáticas';
 $string['activitylinked'] = 'Actividad vinculada';
 $string['activitylinked_help'] = 'Selecciona la actividad que evaluará la regla. Solo se muestran actividades visibles.';
 $string['activitynoteligible'] = 'Selecciona una actividad que pueda otorgar insignias mediante calificaciones o entregas.';

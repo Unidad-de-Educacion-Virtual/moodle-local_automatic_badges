@@ -27,6 +27,7 @@ defined('MOODLE_INTERNAL') || die();
 
 // Plugin name.
 $string['actions'] = 'Actions';
+$string['automatic_badges:manage'] = 'Manage automatic badges';
 $string['activitylinked'] = 'Linked activity';
 $string['activitylinked_help'] = 'Select the activity that will be evaluated by the rule. Only visible activities are listed.';
 $string['activitynoteligible'] = 'Select an activity that can award badges through grades or submissions.';
