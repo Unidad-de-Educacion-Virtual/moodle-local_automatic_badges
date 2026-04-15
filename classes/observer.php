@@ -33,9 +33,9 @@ class observer {
     /**
      * Handles grade updated event.
      *
-     * @param \core\event\grade_updated $event
+     * @param \core\event\user_graded $event
      */
-    public static function grade_updated(\core\event\grade_updated $event) {
+    public static function grade_updated(\core\event\user_graded $event) {
         global $CFG, $DB;
 
         $data = $event->get_data();
