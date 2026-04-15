@@ -64,7 +64,7 @@ class local_automatic_badges_add_global_rule_form extends moodleform {
             )
         );
         $mform->setExpanded('globaltypehdr', true);
-         // Tipo de módulo.
+         // Module type.
         $modtypes = \local_automatic_badges\helper::get_global_mod_types();
         $mform->addElement(
             'select',
@@ -103,7 +103,7 @@ class local_automatic_badges_add_global_rule_form extends moodleform {
         $mform->setDefault('criterion_type', $criterion);
         $mform->addRule('criterion_type', null, 'required', null, 'server');
 
-        // SECTION 2: Selección de actividades.
+        // SECTION 2: Activity selection.
 
         $mform->addElement(
             'header',
@@ -138,7 +138,7 @@ class local_automatic_badges_add_global_rule_form extends moodleform {
         '
         );
 
-        // SECTION 3: Criterio de evaluación.
+        // SECTION 3: Evaluation criterion.
 
         $mform->addElement(
             'header',
@@ -149,7 +149,7 @@ class local_automatic_badges_add_global_rule_form extends moodleform {
             )
         );
         $mform->setExpanded('criteriahdr', true);
-         // Calificación.
+         // Grade.
         $operators = [
             '>='    => get_string('operator_gte', 'local_automatic_badges'),
             '>'     => get_string('operator_gt', 'local_automatic_badges'),
@@ -417,7 +417,7 @@ class local_automatic_badges_add_global_rule_form extends moodleform {
         $mform->setType('dry_run', PARAM_INT);
         $mform->setDefault('dry_run', 0);
 
-        // Botones de acción.
+        // Action buttons.
 
         // Disable client-side change checker (all rules are server-side).
         $mform->disable_form_change_checker();
@@ -427,7 +427,7 @@ class local_automatic_badges_add_global_rule_form extends moodleform {
             get_string('globalrule_submit', 'local_automatic_badges')
         );
 
-        // JavaScript: carga dinámica de actividades + filtro de criterios.
+        // JavaScript: dynamic activity loading + criterion filter.
 
         $criteriamodmap = json_encode(
             \local_automatic_badges\helper::get_criteria_mod_map(),

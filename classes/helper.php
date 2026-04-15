@@ -201,7 +201,7 @@ class helper {
             } else if ($record->itemtype === 'manual') {
                 $label = '[Manual] ' . ($record->itemname ?? 'Item ' . $record->id);
             } else if ($record->itemtype === 'category') {
-                $label = '[Categoría] ' . ($record->catname ?? 'Categoría ' . $record->id);
+                $label = '[Category] ' . ($record->catname ?? 'Category ' . $record->id);
             } else {
                 $label = '[' . $record->itemtype . '] ' . ($record->itemname ?? 'Item ' . $record->id);
             }

@@ -37,7 +37,7 @@ function xmldb_local_automatic_badges_install() {
     $setting = new \stdClass();
     $setting->courseid = 0;
     $setting->setting_name = 'default_notify_message';
-    $setting->setting_value = '¡Felicidades! Has recibido una nueva insignia automática.';
+    $setting->setting_value = 'Congratulations! You have received a new automatic badge.';
     $DB->insert_record('local_automatic_badges_settings', $setting);
 
     // Initial sample rule.
@@ -53,7 +53,7 @@ function xmldb_local_automatic_badges_install() {
     $rule->bonus_points = null;
     $rule->bonus_target_activityid = null;
     $rule->notify_enabled = 1;
-    $rule->notify_message = '¡Enhorabuena! Has superado la nota mínima.';
+    $rule->notify_message = 'Well done! You have achieved the minimum grade.';
     $rule->timecreated = $time;
     $rule->timemodified = $time;
     $DB->insert_record('local_automatic_badges_rules', $rule);

@@ -78,12 +78,12 @@ if (!empty($defaults)) {
     $mform->set_data((object)$defaults);
 }
 
-// Redirección si se cancela.
+// Redirect if cancelled.
 if ($mform->is_cancelled()) {
     redirect(new moodle_url('/local/automatic_badges/course_settings.php', ['id' => $courseid]));
 }
 
-// Procesamiento del envio del formulario.
+// Form submission processing.
 if ($data = $mform->get_data()) {
     $data->selected_activities = optional_param_array('selected_activities', [], PARAM_INT);
     $istestrun = !empty($data->testrule);
@@ -109,7 +109,7 @@ if ($data = $mform->get_data()) {
     );
 }
 
-// Encabezado de la pagina.
+// Page header.
 echo $OUTPUT->header();
 
 // Banner informativo sobre reglas individuales.
@@ -133,7 +133,7 @@ echo html_writer::div(
 
 echo $OUTPUT->heading(get_string('addnewrule', 'local_automatic_badges'), 2);
 
-// Notificación de plantilla aplicada.
+// Template applied notification.
 if (!empty($template)) {
     $templatenames = [
         'excellence' => get_string('template_excellence', 'local_automatic_badges'),
@@ -145,7 +145,7 @@ if (!empty($template)) {
     $templatename = $templatenames[$template] ?? $template;
     echo $OUTPUT->notification(
         html_writer::tag('i', '', ['class' => 'fa fa-magic mr-2']) .
-        "Plantilla aplicada: <strong>{$templatename}</strong>. Personaliza los valores según necesites.",
+        get_string('template_applied', 'local_automatic_badges', $templatename),
         'info'
     );
 }

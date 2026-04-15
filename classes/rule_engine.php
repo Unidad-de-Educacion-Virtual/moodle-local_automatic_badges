@@ -337,8 +337,8 @@ class rule_engine {
     /**
      * Compares a grade using the specified operator.
      *
-     * @param float $grade Calificación del estudiante.
-     * @param string $operator Operador de comparación (>=, >, <=, <, ==).
+     * @param float $grade Student's grade.
+     * @param string $operator Comparison operator (>=, >, <=, <, ==).
      * @param float $threshold Valor de referencia.
      * @param float|null $grademax Maximum grade for range operator.
      * @return bool
@@ -420,7 +420,7 @@ class rule_engine {
             return null;
         }
 
-        // Calcular porcentaje basado en grademin y grademax de la actividad.
+        // Calculate percentage based on activity grademin and grademax.
         $grademax = isset($item->grademax) ? (float)$item->grademax : 100.0;
         $grademin = isset($item->grademin) ? (float)$item->grademin : 0.0;
         $rawgrade = (float)$usergrade->grade;
@@ -439,7 +439,7 @@ class rule_engine {
      * @param int $courseid
      * @param int $cmid
      * @param int $userid
-     * @param string $counttype Tipo de conteo: 'all', 'replies', 'topics'
+     * @param string $counttype Count type: 'all', 'replies', 'topics'.
      * @return int
      */
     private static function get_forum_reply_count(int $courseid, int $cmid, int $userid, string $counttype = 'all'): int {
@@ -455,20 +455,20 @@ class rule_engine {
             'userid' => $userid,
         ];
 
-        // Construir condición según el tipo de conteo.
+        // Build SQL condition based on count type.
         $parentcondition = '';
         switch ($counttype) {
             case 'replies':
-                // Solo respuestas (parent != 0).
+                // Replies only (parent != 0).
                 $parentcondition = 'AND p.parent <> 0';
                 break;
             case 'topics':
-                // Solo temas nuevos (parent = 0).
+                // New topics only (parent = 0).
                 $parentcondition = 'AND p.parent = 0';
                 break;
             case 'all':
             default:
-                // Todos los posts (temas + respuestas).
+                // All posts (topics + replies).
                 $parentcondition = '';
                 break;
         }

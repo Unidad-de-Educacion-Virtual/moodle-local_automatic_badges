@@ -32,7 +32,7 @@ require_once($CFG->dirroot . '/local/automatic_badges/forms/form_add_global_rule
 
 use local_automatic_badges\rule_manager;
 
-// Parámetros requeridos.
+// Required parameters.
 $courseid = optional_param('id', 0, PARAM_INT);
 if ($courseid == 0) {
     $courseid = required_param('courseid', PARAM_INT);
@@ -45,36 +45,36 @@ $context = context_course::instance($courseid);
 require_login($course);
 require_capability('moodle/badges:configurecriteria', $context);
 
-// Configuración de la página.
+// Page setup.
 $PAGE->set_url(new moodle_url('/local/automatic_badges/add_global_rule.php', ['id' => $courseid]));
 $PAGE->set_context($context);
 $PAGE->set_pagelayout('course');
 $PAGE->set_title(get_string('addglobalrule', 'local_automatic_badges'));
 $PAGE->set_heading(format_string($course->fullname));
 
-// Construcción del formulario.
+// Form setup.
 $mform = new local_automatic_badges_add_global_rule_form(null, [
     'courseid'       => $courseid, 'criterion_type' => optional_param('criterion_type', 'grade', PARAM_ALPHA),
 ]);
 
-// Redirección si se cancela.
+// Redirect if cancelled.
 if ($mform->is_cancelled()) {
     redirect(new moodle_url('/local/automatic_badges/course_settings.php', ['id' => $courseid]));
 }
 
-// Procesamiento del envío del formulario.
+// Form submission processing.
 if ($data = $mform->get_data()) {
     // Read selected activity IDs injected by JS as individual hidden inputs.
     $selectedids = optional_param_array('selected_act', [], PARAM_INT);
     $data->selected_activities = array_values(array_filter($selectedids));
 
-    // Marcar como regla global.
+    // Mark as global rule.
     $data->is_global_rule = 1;
 
     [$newruleid, $message, $notificationtype, $shouldtest] = rule_manager::process_rule_submission(
         $data,
         $courseid,
-        0, // Nueva regla.
+        0, // New rule.
         false
     );
 
@@ -86,7 +86,7 @@ if ($data = $mform->get_data()) {
     );
 }
 
-// Encabezado de la página.
+// Page header.
 echo $OUTPUT->header();
 
 // Banner informativo sobre reglas globales.

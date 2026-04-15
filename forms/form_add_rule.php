@@ -54,7 +54,7 @@ class local_automatic_badges_add_rule_form extends moodleform {
         $mform->addElement('hidden', 'ruleid', $ruleid);
         $mform->setType('ruleid', PARAM_INT);
 
-        // SECTION 1: Criterio de evaluación.
+        // SECTION 1: Evaluation criterion.
 
         $mform->addElement(
             'header',
@@ -92,7 +92,7 @@ class local_automatic_badges_add_rule_form extends moodleform {
         $mform->addHelpButton('criterion_type', 'criteriontype', 'local_automatic_badges');
         $mform->setDefault('criterion_type', $criterion);
         $mform->addRule('criterion_type', null, 'required', null, 'client');
-         // Calificación.
+         // Grade.
         $operators = [
             '>='    => get_string('operator_gte', 'local_automatic_badges'),
             '>'     => get_string('operator_gt', 'local_automatic_badges'),
@@ -138,7 +138,7 @@ class local_automatic_badges_add_rule_form extends moodleform {
         $mform->setType('grade_max', PARAM_FLOAT);
         $mform->setDefault('grade_max', 100);
         // Grade_max is hidden unless operator = 'range'; JS handles both grade and forum_grade.
-         // Foro.
+         // Forum.
         $forumcounttypes = [
             'all'     => get_string('forumcounttype_all', 'local_automatic_badges'),
             'replies' => get_string('forumcounttype_replies', 'local_automatic_badges'),
@@ -228,7 +228,7 @@ class local_automatic_badges_add_rule_form extends moodleform {
         $mform->setDefault('early_hours', 24);
         $mform->hideIf('early_hours', 'criterion_type', 'neq', 'submission');
         $mform->hideIf('early_hours', 'submission_type', 'neq', 'early');
-         // Sección (acumulativo).
+         // Section (cumulative).
         $mform->addElement(
             'text',
             'section_min_grade',
@@ -458,7 +458,7 @@ class local_automatic_badges_add_rule_form extends moodleform {
         '
         );
 
-        // Botones de acción.
+        // Action buttons.
 
         $mform->addElement(
             'submit',
@@ -474,7 +474,7 @@ class local_automatic_badges_add_rule_form extends moodleform {
             get_string('saverule', 'local_automatic_badges')
         );
 
-        // JavaScript: actividades dinámicas + preview.
+        // JavaScript: dynamic activities + preview.
 
         $activityjson = json_encode($criteriaactivities, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT);
         $noactivities = json_encode(
@@ -667,23 +667,23 @@ require(['jquery'], function($) {
             var parts = [];
 
             if (dryRun) {
-                parts.push('<span class="badge badge-warning"><i class="fa fa-flask"></i> MODO PRUEBA</span>');
+                parts.push('<span class="badge badge-warning"><i class="fa fa-flask"></i> TEST MODE</span>');
             } else if (!enabled) {
-                parts.push('<span class="badge badge-secondary"><i class="fa fa-pause"></i> Deshabilitada</span>');
+                parts.push('<span class="badge badge-secondary"><i class="fa fa-pause"></i> Disabled</span>');
             } else {
-                parts.push('<span class="badge badge-success"><i class="fa fa-check-circle"></i> Activa</span>');
+                parts.push('<span class="badge badge-success"><i class="fa fa-check-circle"></i> Active</span>');
             }
 
             parts.push('<div class="mt-2">');
-            parts.push('<i class="fa fa-filter text-muted"></i> <strong>Criterio:</strong> ' + criterionLabel);
+            parts.push('<i class="fa fa-filter text-muted"></i> <strong>Criterion:</strong> ' + criterionLabel);
 
-            var linkedLabel = (criterion === 'grade_item') ? 'Ítem de calificación' : 'Actividad';
+            var linkedLabel = (criterion === 'grade_item') ? 'Grade Item' : 'Activity';
             if (activityVal && activityVal !== '0' && selectedName) {
                 parts.push('<br><i class="fa fa-link text-muted"></i> <strong>' + linkedLabel + ':</strong> ' +
                     $('<div>').text(selectedName).html());
             } else {
                 parts.push('<br><i class="fa fa-link text-muted"></i> <strong>' + linkedLabel + ':</strong> ' +
-                    '<em class="text-danger">Sin seleccionar</em>');
+                    '<em class="text-danger">Not selected</em>');
             }
             parts.push('</div>');
 
@@ -692,70 +692,70 @@ require(['jquery'], function($) {
                 var op  = gradeOperatorRaw || '>=';
                 var min = gradeMin || '0';
                 if (op === 'range' && gradeMax) {
-                    conditionHtml = 'Calificación entre <strong class="text-primary">' + min +
-                        '%</strong> y <strong class="text-primary">' + gradeMax + '%</strong>';
+                    conditionHtml = 'Grade between <strong class="text-primary">' + min +
+                        '%</strong> and <strong class="text-primary">' + gradeMax + '%</strong>';
                 } else if (op === 'range') {
-                    conditionHtml = 'Calificación entre <strong class="text-primary">' + min +
-                        '%</strong> y <strong class="text-primary">Sin límite superior</strong>';
+                    conditionHtml = 'Grade between <strong class="text-primary">' + min +
+                        '%</strong> and <strong class="text-primary">No upper limit</strong>';
                 } else {
-                    conditionHtml = 'Calificación ' + op + ' <strong class="text-primary">' + min + '%</strong>';
+                    conditionHtml = 'Grade ' + op + ' <strong class="text-primary">' + min + '%</strong>';
                 }
             } else if (criterion === 'forum_grade') {
                 var op  = gradeOperatorRaw || '>=';
                 var min = gradeMin || '0';
                 if (op === 'range' && gradeMax) {
-                    conditionHtml = 'Nota en foro entre <strong class="text-primary">' + min +
-                        '%</strong> y <strong class="text-primary">' + gradeMax + '%</strong>';
+                    conditionHtml = 'Forum grade between <strong class="text-primary">' + min +
+                        '%</strong> and <strong class="text-primary">' + gradeMax + '%</strong>';
                 } else if (op === 'range') {
-                    conditionHtml = 'Nota en foro entre <strong class="text-primary">' + min +
-                        '%</strong> y <strong class="text-primary">Sin límite superior</strong>';
+                    conditionHtml = 'Forum grade between <strong class="text-primary">' + min +
+                        '%</strong> and <strong class="text-primary">No upper limit</strong>';
                 } else {
-                    conditionHtml = 'Nota en foro ' + op + ' <strong class="text-primary">' + min + '%</strong>';
+                    conditionHtml = 'Forum grade ' + op + ' <strong class="text-primary">' + min + '%</strong>';
                 }
             } else if (criterion === 'grade_item') {
                 var op  = gradeOperatorRaw || '>=';
                 var min = gradeMin || '0';
                 if (op === 'range' && gradeMax) {
-                    conditionHtml = 'Calificación del ítem entre <strong class="text-primary">' + min +
-                        '%</strong> y <strong class="text-primary">' + gradeMax + '%</strong>';
+                    conditionHtml = 'Item grade between <strong class="text-primary">' + min +
+                        '%</strong> and <strong class="text-primary">' + gradeMax + '%</strong>';
                 } else if (op === 'range') {
-                    conditionHtml = 'Calificación del ítem entre <strong class="text-primary">' + min +
-                        '%</strong> y <strong class="text-primary">Sin límite superior</strong>';
+                    conditionHtml = 'Item grade between <strong class="text-primary">' + min +
+                        '%</strong> and <strong class="text-primary">No upper limit</strong>';
                 } else {
-                    conditionHtml = 'Calificación del ítem ' + op + ' <strong class="text-primary">' + min + '%</strong>';
+                    conditionHtml = 'Item grade ' + op + ' <strong class="text-primary">' + min + '%</strong>';
                 }
             } else if (criterion === 'forum') {
-                var typeLabel = countType === 'replies' ? 'respuesta(s)' :
-                    (countType === 'topics' ? 'tema(s) nuevo(s)' : 'publicación(es)');
-                conditionHtml = 'Mínimo <strong class="text-primary">' + (forumPosts || '5') +
-                    '</strong> ' + typeLabel + ' en el foro';
+                var typeLabel = countType === 'replies' ? 'reply(ies)' :
+                    (countType === 'topics' ? 'new topic(s)' : 'post(s)');
+                conditionHtml = 'Minimum <strong class="text-primary">' + (forumPosts || '5') +
+                    '</strong> ' + typeLabel + ' in the forum';
             } else if (criterion === 'submission') {
                 var conds = [];
-                if (reqSubmitted) conds.push('entrega realizada');
-                if (reqGraded)    conds.push('calificación publicada');
+                if (reqSubmitted) conds.push('submission made');
+                if (reqGraded)    conds.push('grade published');
                 if (submissionType === 'ontime') {
                     conds.push('<strong class="text-success">a tiempo</strong>');
                 } else if (submissionType === 'early') {
                     conds.push('<strong class="text-success">' + earlyHours + 'h antes del plazo</strong>');
                 }
-                conditionHtml = conds.length > 0 ? conds.join(' y ') : '<em class="text-warning">Sin requisitos extra</em>';
+                conditionHtml = conds.length > 0 ? conds.join(' and ') : '<em class="text-warning">No extra requirements</em>';
             }
 
             if (conditionHtml) {
                 parts.push('<div class="mt-1"><i class="fa fa-tasks text-muted"></i> ' +
-                    '<strong>Condición:</strong> ' + conditionHtml + '</div>');
+                    '<strong>Condition:</strong> ' + conditionHtml + '</div>');
             }
 
             var rewardHtml = '<div class="mt-2 py-2 px-2 bg-white rounded border">';
             if (badgeName) {
-                rewardHtml += '<i class="fa fa-trophy text-warning"></i> <strong>Insignia:</strong> ' + badgeName;
+                rewardHtml += '<i class="fa fa-trophy text-warning"></i> <strong>Badge:</strong> ' + badgeName;
             } else {
                 rewardHtml += '<i class="fa fa-trophy text-muted"></i> ' +
-                    '<strong>Insignia:</strong> <em class="text-danger">Sin seleccionar</em>';
+                    '<strong>Badge:</strong> <em class="text-danger">Not selected</em>';
             }
             if (enableBonus && bonusPoints && parseFloat(bonusPoints) > 0) {
                 rewardHtml += '<br><i class="fa fa-gift text-success"></i> ' +
-                    '<strong>Bonificación:</strong> +' + bonusPoints + ' punto(s)';
+                    '<strong>Bonus:</strong> +' + bonusPoints + ' point(s)';
             }
             rewardHtml += '</div>';
             parts.push(rewardHtml);
@@ -769,8 +769,8 @@ require(['jquery'], function($) {
 
             if (dryRun) {
                 parts.push('<div class="alert alert-warning mt-2 mb-0 py-1"><small>' +
-                    '<i class="fa fa-exclamation-triangle"></i> Esta regla no ' +
-                    'otorgará insignias realmente.</small></div>');
+                    '<i class="fa fa-exclamation-triangle"></i> This rule will not ' +
+                    'award badges for real.</small></div>');
             }
 
             $('#local_automatic_badges_rule_preview_text').html(parts.join(''));

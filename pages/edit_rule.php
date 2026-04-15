@@ -98,13 +98,7 @@ echo $OUTPUT->heading(get_string('editrule', 'local_automatic_badges'), 2);
 
 // Display warning if rule has already issued a badge.
 if ($DB->record_exists('local_automatic_badges_log', ['ruleid' => $ruleid])) {
-    $warnmsg = '<strong>Advertencia:</strong> Esta regla ya ha otorgado la insignia a uno o más estudiantes. ';
-    $warnmsg .= 'Editar sus criterios o condiciones puede provocar graves inconsistencias entre los estudiantes ';
-    $warnmsg .= 'que ya la obtuvieron de forma retrospectiva con la configuración anterior y los futuros ';
-    $warnmsg .= 'evaluados con la nueva versión de esta regla.<br><br>';
-    $warnmsg .= '<strong>Recomendación:</strong> Antes de modificar su funcionamiento o tipo de criterio ';
-    $warnmsg .= 'y guardarla, dirígete a la administración de insignias nativa del curso y elimina la insignia ';
-    $warnmsg .= '(o revócasela a los estudiantes) para garantizar equidad.';
+    $warnmsg = get_string('editrule_issuedwarning', 'local_automatic_badges');
     echo html_writer::div($warnmsg, 'alert alert-warning');
 }
 

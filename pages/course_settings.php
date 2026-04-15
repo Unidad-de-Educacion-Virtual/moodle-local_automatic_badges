@@ -172,12 +172,12 @@ if (!empty($testaction) && $currenttab === 'testlogic' && confirm_sesskey()) {
                     }
                 }
             }
-            $message = "Revisión retroactiva completada. Insignias otorgadas: {$awarded}";
+            $message = get_string('testlogic_retroactive_completed', 'local_automatic_badges', $awarded);
             redirect(new moodle_url($PAGE->url, ['tab' => 'testlogic']), $message, 0, \core\output\notification::NOTIFY_SUCCESS);
         } else {
             redirect(
                 new moodle_url($PAGE->url, ['tab' => 'testlogic']),
-                'La insignia base fue eliminada',
+                get_string('testlogic_badge_base_deleted', 'local_automatic_badges'),
                 0,
                 \core\output\notification::NOTIFY_ERROR
             );
@@ -240,7 +240,7 @@ $tabdefs = [
     'badges' => ['label' => get_string('tab_badges', 'local_automatic_badges'), 'icon' => 'fa-certificate'],
     'templates' => ['label' => get_string('tab_templates', 'local_automatic_badges'), 'icon' => 'fa-copy'],
     'history' => ['label' => get_string('tab_history', 'local_automatic_badges'), 'icon' => 'fa-clock-rotate-left'],
-    'testlogic' => ['label' => 'Diagnóstico', 'icon' => 'fa-stethoscope'],
+    'testlogic' => ['label' => get_string('tab_diagnostic', 'local_automatic_badges'), 'icon' => 'fa-stethoscope'],
     'settings' => ['label' => get_string('tab_settings', 'local_automatic_badges'), 'icon' => 'fa-gear'],
 ];
 
@@ -320,7 +320,7 @@ function local_automatic_badges_render_rules_tab($courseid, $OUTPUT, $PAGE, $DB,
     $btndesigner = html_writer::link(
         new moodle_url('/local/automatic_badges/pages/badge_designer.php', ['id' => $courseid]),
         html_writer::tag('i', '', ['class' => 'fa fa-paint-brush mr-2']) .
-        "Diseñar Insignia", // Hardcoded for mockup.
+        get_string('designbadge', 'local_automatic_badges'),
         ['class' => 'btn btn-outline-info ml-2']
     );
 
@@ -362,7 +362,7 @@ function local_automatic_badges_render_rules_tab($courseid, $OUTPUT, $PAGE, $DB,
             $activityname = "<strong>Global:</strong> " . ucfirst($rule->activity_type);
         } else if ($rule->activityid) {
             $cm = get_coursemodule_from_id(null, $rule->activityid, $courseid, false, IGNORE_MISSING);
-            $activityname = $cm ? format_string($cm->name) : "<span class='text-danger'>Desconocida</span>";
+            $activityname = $cm ? format_string($cm->name) : "<span class='text-danger'>" . get_string('testlogic_unknown_activity_short', 'local_automatic_badges') . "</span>";
         } else {
             $activityname = "-";
         }
@@ -887,10 +887,10 @@ function local_automatic_badges_render_testlogic_tab($courseid, $OUTPUT, $DB, $P
 
     $userid = optional_param('userid', 0, PARAM_INT);
 
-    echo html_writer::tag('h4', 'Herramienta de Diagnóstico', ['class' => 'mb-1']);
+    echo html_writer::tag('h4', get_string('testlogic_title', 'local_automatic_badges'), ['class' => 'mb-1']);
     echo html_writer::tag(
         'p',
-        'Evalúa usuarios individualmente o aplica revisiones retroactivas a las reglas del curso.',
+        get_string('testlogic_desc', 'local_automatic_badges'),
         ['class' => 'text-muted mb-4']
     );
 
@@ -899,7 +899,7 @@ function local_automatic_badges_render_testlogic_tab($courseid, $OUTPUT, $DB, $P
 
     echo html_writer::start_div('card mb-4');
     echo html_writer::start_div('card-header bg-white');
-    echo html_writer::tag('h5', '<i class="fa fa-user-check mr-2"></i>Evaluar Usuario', ['class' => 'mb-0']);
+    echo html_writer::tag('h5', '<i class="fa fa-user-check mr-2"></i>' . get_string('testlogic_evaluate_user', 'local_automatic_badges'), ['class' => 'mb-0']);
     echo html_writer::end_div();
     echo html_writer::start_div('card-body');
 
@@ -907,11 +907,11 @@ function local_automatic_badges_render_testlogic_tab($courseid, $OUTPUT, $DB, $P
     echo html_writer::start_tag('form', $formattrs);
     echo html_writer::empty_tag('input', ['type' => 'hidden', 'name' => 'id', 'value' => $courseid]);
     echo html_writer::empty_tag('input', ['type' => 'hidden', 'name' => 'tab', 'value' => 'testlogic']);
-    $labelcontent = '<i class="fa fa-user mr-1"></i> Usuario:';
+    $labelcontent = '<i class="fa fa-user mr-1"></i> ' . get_string('testlogic_user_label', 'local_automatic_badges');
     echo html_writer::tag('label', $labelcontent, ['class' => 'mr-3 font-weight-bold mb-0',
         'style' => 'white-space: nowrap;']);
     echo html_writer::start_div('mr-3 mb-0', ['style' => 'flex: 1; min-width: 250px; max-width: 400px;']);
-    $selectoptions = [0 => 'Selecciona un usuario...'];
+    $selectoptions = [0 => get_string('testlogic_select_user', 'local_automatic_badges')];
     foreach ($users as $u) {
         $selectoptions[$u->id] = fullname($u);
     }
@@ -923,7 +923,7 @@ function local_automatic_badges_render_testlogic_tab($courseid, $OUTPUT, $DB, $P
         ['id' => 'testlogic-user-select', 'class' => 'custom-select w-100']
     );
     echo html_writer::end_div();
-    $btncontent = '<i class="fa fa-search mr-1"></i> Evaluar';
+    $btncontent = '<i class="fa fa-search mr-1"></i> ' . get_string('testlogic_evaluate', 'local_automatic_badges');
     echo html_writer::tag('button', $btncontent, ['type' => 'submit', 'class' => 'btn btn-primary btn-sm mb-0']);
     echo html_writer::end_tag('form');
 
@@ -934,7 +934,7 @@ function local_automatic_badges_render_testlogic_tab($courseid, $OUTPUT, $DB, $P
 
     if (empty($rules)) {
         echo $OUTPUT->notification(
-            'No hay reglas configuradas en este curso. Crea al menos una regla para usar el diagnóstico.',
+            get_string('testlogic_no_rules', 'local_automatic_badges'),
             'info'
         );
         echo html_writer::end_div(); // End card-body.
@@ -945,14 +945,14 @@ function local_automatic_badges_render_testlogic_tab($courseid, $OUTPUT, $DB, $P
     if ($userid) {
         $selecteduser = $users[$userid] ?? null;
         if (!$selecteduser) {
-            echo $OUTPUT->notification('Usuario no encontrado o no matriculado.', 'error');
+            echo $OUTPUT->notification(get_string('testlogic_user_not_found', 'local_automatic_badges'), 'error');
             return;
         }
 
         echo html_writer::tag('hr', '');
         echo html_writer::tag(
             'h6',
-            '<i class="fa fa-clipboard-list mr-1"></i> Resultado para: '
+            '<i class="fa fa-clipboard-list mr-1"></i> ' . get_string('testlogic_result_for', 'local_automatic_badges') . ' '
             . '<span class="text-primary">' . fullname($selecteduser) . '</span>',
             ['class' => 'mb-3 mt-3']
         );
@@ -960,14 +960,18 @@ function local_automatic_badges_render_testlogic_tab($courseid, $OUTPUT, $DB, $P
         echo '<div class="table-responsive">';
         echo '<table class="table table-bordered table-striped table-hover bg-white mb-0">';
         echo '<thead class="thead-light"><tr>';
-        echo '<th>Actividad</th><th>Insignia</th><th>Criterio</th>';
-        echo '<th>Estado Actual</th><th>¿Cumple?</th><th>¿Emitida?</th>';
-        echo '<th>Acción</th></tr></thead>';
+        echo '<th>' . get_string('testlogic_col_activity', 'local_automatic_badges') . '</th>';
+        echo '<th>' . get_string('history_badge', 'local_automatic_badges') . '</th>';
+        echo '<th>' . get_string('criteriontype', 'local_automatic_badges') . '</th>';
+        echo '<th>' . get_string('testlogic_col_current_status', 'local_automatic_badges') . '</th>';
+        echo '<th>' . get_string('testlogic_col_meets', 'local_automatic_badges') . '</th>';
+        echo '<th>' . get_string('testlogic_col_issued', 'local_automatic_badges') . '</th>';
+        echo '<th>' . get_string('actions', 'local_automatic_badges') . '</th></tr></thead>';
         echo '<tbody>';
 
         foreach ($rules as $rule) {
             $cm = get_coursemodule_from_id(null, $rule->activityid, $courseid, false, IGNORE_MISSING);
-            $unknownlabel = "<span class='text-danger'>Desconocida (ID: {$rule->activityid})</span>";
+            $unknownlabel = "<span class='text-danger'>" . get_string('testlogic_unknown_activity', 'local_automatic_badges', $rule->activityid) . "</span>";
             $activityname = $cm ? format_string($cm->name) : $unknownlabel;
 
             // Get Real Grade.
@@ -975,12 +979,12 @@ function local_automatic_badges_render_testlogic_tab($courseid, $OUTPUT, $DB, $P
             $isgradecriterion = in_array($rule->criterion_type, ['grade', 'forum_grade', 'grade_item']);
             if ($isgradecriterion) {
                 if (($rule->grade_operator ?? '>=') === 'range' && !empty($rule->grade_max)) {
-                    $gradeinfo .= " (Rango: {$rule->grade_min}% a {$rule->grade_max}%)";
+                    $gradeinfo .= ' ' . get_string('testlogic_grade_range', 'local_automatic_badges', (object)['min' => $rule->grade_min, 'max' => $rule->grade_max]);
                 } else {
-                    $gradeinfo .= " (Mínimo: {$rule->grade_min}%)";
+                    $gradeinfo .= ' ' . get_string('testlogic_grade_min', 'local_automatic_badges', $rule->grade_min);
                 }
             } else if ($rule->criterion_type === 'forum') {
-                 $gradeinfo = "<span class='text-muted'>Revisado por posts</span>";
+                 $gradeinfo = "<span class='text-muted'>" . get_string('testlogic_checked_by_posts', 'local_automatic_badges') . "</span>";
             } else if ($rule->criterion_type === 'submission' && $cm && $cm->modname === 'assign') {
                  global $DB;
                  $submission = $DB->get_record('assign_submission', [
@@ -989,27 +993,27 @@ function local_automatic_badges_render_testlogic_tab($courseid, $OUTPUT, $DB, $P
                      'latest' => 1,
                  ]);
                 if ($submission && $submission->status === 'submitted') {
-                    $gradeinfo = '<span class="text-success"><i class="fa fa-clock mr-1"></i>Entregada:</span> ';
+                    $gradeinfo = '<span class="text-success"><i class="fa fa-clock mr-1"></i>' . get_string('testlogic_submission_delivered', 'local_automatic_badges') . '</span> ';
                     $gradeinfo .= userdate($submission->timemodified, get_string('strftimedatetimeshort', 'core_langconfig'));
                 } else {
-                    $gradeinfo = '<span class="text-muted">Sin entrega registrada</span>';
+                    $gradeinfo = '<span class="text-muted">' . get_string('testlogic_no_submission', 'local_automatic_badges') . '</span>';
                 }
             } else if ($rule->is_global_rule) {
-                 $gradeinfo = "<span class='text-muted'>Regla Global ({$rule->activity_type})</span>";
-                 $activityname = "Múltiples";
+                 $gradeinfo = "<span class='text-muted'>" . get_string('testlogic_global_rule', 'local_automatic_badges', $rule->activity_type) . "</span>";
+                 $activityname = get_string('testlogic_multiple', 'local_automatic_badges');
             }
 
             // Logic Check.
             $meetsrule = \local_automatic_badges\rule_engine::check_rule($rule, $userid);
             $logicresult = $meetsrule
-                ? '<span class="badge badge-success p-2"><i class="fa fa-check"></i> SÍ</span>'
+                ? '<span class="badge badge-success p-2"><i class="fa fa-check"></i> ' . get_string('testlogic_meets_yes', 'local_automatic_badges') . '</span>'
                 : '<span class="badge badge-danger p-2"><i class="fa fa-times"></i> NO</span>';
 
             // Check if badge exists before loading it.
             if (!$DB->record_exists('badge', ['id' => $rule->badgeid])) {
                 echo "<tr>";
                 echo "<td>{$activityname}</td>";
-                echo "<td><span class='text-danger'>Insignia Eliminada</span></td>";
+                echo "<td><span class='text-danger'>" . get_string('testlogic_badge_deleted', 'local_automatic_badges') . "</span></td>";
                 echo "<td>" . ucfirst($rule->criterion_type) . "</td>";
                 echo "<td>{$gradeinfo}</td>";
                 echo "<td class='text-center align-middle'>{$logicresult}</td>";
@@ -1023,8 +1027,8 @@ function local_automatic_badges_render_testlogic_tab($courseid, $OUTPUT, $DB, $P
             $badge = new \core_badges\badge($rule->badgeid);
             $isissued = $badge->is_issued($userid);
             $issuedstatus = $isissued
-                ? '<span class="badge badge-success p-2"><i class="fa fa-award"></i> Emitida</span>'
-                : '<span class="badge badge-warning p-2"><i class="fa fa-clock"></i> Pendiente</span>';
+                ? '<span class="badge badge-success p-2"><i class="fa fa-award"></i> ' . get_string('testlogic_issued', 'local_automatic_badges') . '</span>'
+                : '<span class="badge badge-warning p-2"><i class="fa fa-clock"></i> ' . get_string('testlogic_pending', 'local_automatic_badges') . '</span>';
 
             // Action Button.
             $btn = '';
@@ -1036,7 +1040,7 @@ function local_automatic_badges_render_testlogic_tab($courseid, $OUTPUT, $DB, $P
                     'testaction' => 'force_award',
                     'sesskey' => sesskey(),
                 ]);
-                $btn = html_writer::link($forceurl, '<i class="fa fa-bolt"></i> Otorgar', ['class' => 'btn btn-sm btn-primary']);
+                $btn = html_writer::link($forceurl, '<i class="fa fa-bolt"></i> ' . get_string('testlogic_award', 'local_automatic_badges'), ['class' => 'btn btn-sm btn-primary']);
             }
 
             $badgeurl = new moodle_url('/badges/overview.php', ['id' => $rule->badgeid]);
@@ -1060,42 +1064,44 @@ function local_automatic_badges_render_testlogic_tab($courseid, $OUTPUT, $DB, $P
     // Section 2: Retroactive Review (always visible).
     echo html_writer::start_div('card');
     echo html_writer::start_div('card-header bg-white');
-    echo html_writer::tag('h5', '<i class="fa fa-users-cog mr-2"></i>Revisión Retroactiva', ['class' => 'mb-0']);
+    echo html_writer::tag('h5', '<i class="fa fa-users-cog mr-2"></i>' . get_string('testlogic_retroactive_title', 'local_automatic_badges'), ['class' => 'mb-0']);
     echo html_writer::end_div();
     echo html_writer::start_div('card-body');
     echo html_writer::tag(
         'p',
-        'Evalúa una regla para <strong>todos</strong> los estudiantes matriculados'
-        . ' y otorga insignias a quienes cumplan los criterios.',
+        get_string('testlogic_retroactive_desc', 'local_automatic_badges'),
         ['class' => 'text-muted mb-3']
     );
 
     echo '<div class="table-responsive">';
     echo '<table class="table table-bordered table-striped table-hover bg-white mb-0">';
     echo '<thead class="thead-light"><tr>';
-    echo '<th>Actividad</th><th>Insignia</th><th>Criterio</th>';
-    echo '<th>Estado</th><th style="width: 200px;">Acción</th></tr></thead>';
+    echo '<th>' . get_string('testlogic_col_activity', 'local_automatic_badges') . '</th>';
+    echo '<th>' . get_string('history_badge', 'local_automatic_badges') . '</th>';
+    echo '<th>' . get_string('criteriontype', 'local_automatic_badges') . '</th>';
+    echo '<th>' . get_string('testlogic_col_status', 'local_automatic_badges') . '</th>';
+    echo '<th style="width: 200px;">' . get_string('actions', 'local_automatic_badges') . '</th></tr></thead>';
     echo '<tbody>';
     foreach ($rules as $rule) {
         if ($rule->is_global_rule) {
-            $activityname = "<strong>Regla Global</strong> ({$rule->activity_type})";
+            $activityname = "<strong>" . get_string('testlogic_global_rule_short', 'local_automatic_badges') . "</strong> ({$rule->activity_type})";
         } else {
             $cm = get_coursemodule_from_id(null, $rule->activityid, $courseid, false, IGNORE_MISSING);
-            $activityname = $cm ? format_string($cm->name) : "<span class='text-danger'>Desconocida</span>";
+            $activityname = $cm ? format_string($cm->name) : "<span class='text-danger'>" . get_string('testlogic_unknown_activity_short', 'local_automatic_badges') . "</span>";
         }
 
         $ruleenabled = isset($rule->enabled) ? (int)$rule->enabled : 1;
         $statusbadge = $ruleenabled
-            ? '<span class="badge badge-success">Habilitada</span>'
-            : '<span class="badge badge-secondary">Deshabilitada</span>';
+            ? '<span class="badge badge-success">' . get_string('testlogic_badge_enabled', 'local_automatic_badges') . '</span>'
+            : '<span class="badge badge-secondary">' . get_string('testlogic_badge_disabled', 'local_automatic_badges') . '</span>';
 
         if (!$DB->record_exists('badge', ['id' => $rule->badgeid])) {
             echo "<tr>";
             echo "<td class='align-middle'>{$activityname}</td>";
-            echo "<td class='align-middle'><span class='text-danger'>Insignia Eliminada</span></td>";
+            echo "<td class='align-middle'><span class='text-danger'>" . get_string('testlogic_badge_deleted', 'local_automatic_badges') . "</span></td>";
             echo "<td class='align-middle'>" . ucfirst($rule->criterion_type) . "</td>";
             echo "<td class='align-middle'><span class='badge badge-danger'>Error</span></td>";
-            echo "<td class='text-center align-middle'><span class='text-muted'>No disponible</span></td>";
+            echo "<td class='text-center align-middle'><span class='text-muted'>" . get_string('testlogic_not_available', 'local_automatic_badges') . "</span></td>";
             echo "</tr>";
             continue;
         }
@@ -1113,11 +1119,10 @@ function local_automatic_badges_render_testlogic_tab($courseid, $OUTPUT, $DB, $P
         echo "<td class='align-middle'>{$statusbadge}</td>";
         $linkhtml = html_writer::link(
             $retrourl,
-            '<i class="fa fa-users-cog mr-1"></i>Evaluar a Todos',
+            '<i class="fa fa-users-cog mr-1"></i>' . get_string('testlogic_evaluate_all', 'local_automatic_badges'),
             [
                 'class' => 'btn btn-sm btn-info',
-                'onclick' => 'return confirm("¿Evaluar esta regla retroactivamente'
-                    . ' para todos los estudiantes matriculados?");',
+                'onclick' => 'return confirm(' . json_encode(get_string('testlogic_retroactive_confirm', 'local_automatic_badges')) . ');',
             ]
         );
         echo "<td class='text-center align-middle'>" . $linkhtml . "</td>";

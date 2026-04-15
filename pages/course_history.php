@@ -26,26 +26,26 @@
 
 // Local/automatic_badges/pages/course_history.php.
 
-// Dependencias principales.
+// Main dependencies.
 require_once(__DIR__ . '/../../../config.php');
 require_once($CFG->libdir . '/adminlib.php');
 
-// Parámetros requeridos y contexto.
+// Required parameters and context.
 $courseid = required_param('id', PARAM_INT);
 $course   = $DB->get_record('course', ['id' => $courseid], '*', MUST_EXIST);
 $context  = context_course::instance($courseid);
 
-// Validación de acceso.
+// Access validation.
 require_login($courseid);
 require_capability('moodle/course:update', $context);
 
-// Configuración de la página.
+// Page setup.
 $PAGE->set_url(new moodle_url('/local/automatic_badges/course_history.php', ['id' => $courseid]));
 $PAGE->set_context($context);
 $PAGE->set_title(get_string('coursenode_subhistory', 'local_automatic_badges'));
 $PAGE->set_heading(format_string($course->fullname));
 
-// Render de la página.
+// Page render.
 echo $OUTPUT->header();
 echo $OUTPUT->heading(get_string('coursenode_subhistory', 'local_automatic_badges'));
 echo html_writer::tag('p', get_string('historyplaceholder', 'local_automatic_badges'));
