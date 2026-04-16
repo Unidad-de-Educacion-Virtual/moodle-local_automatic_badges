@@ -28,8 +28,6 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Backup plugin class for local_automatic_badges.
  *
@@ -37,7 +35,6 @@ defined('MOODLE_INTERNAL') || die();
  * plugin-owned tables scoped to the course being backed up.
  */
 class backup_local_automatic_badges_plugin extends backup_local_plugin {
-
     /**
      * Returns the plugin structure anchored at the course element.
      *
@@ -51,12 +48,12 @@ class backup_local_automatic_badges_plugin extends backup_local_plugin {
         $pluginwrapper = new backup_nested_element($this->get_recommended_name());
         $plugin->add_child($pluginwrapper);
 
-        // --- 1. Course enable/disable configuration (0 or 1 row per course) ---
+        // 1. Course enable/disable configuration (0 or 1 row per course).
         $coursecfg = new backup_nested_element('automatic_badges_coursecfg', ['id'], [
             'enabled', 'timecreated', 'timemodified',
         ]);
 
-        // --- 2. Award rules ---
+        // 2. Award rules.
         $rules = new backup_nested_element('automatic_badges_rules');
         $rule  = new backup_nested_element('automatic_badges_rule', ['id'], [
             'badgeid',
@@ -73,20 +70,20 @@ class backup_local_automatic_badges_plugin extends backup_local_plugin {
             'timecreated', 'timemodified',
         ]);
 
-        // --- 3. Per-course key/value settings ---
+        // 3. Per-course key/value settings.
         $settings = new backup_nested_element('automatic_badges_settings');
         $setting  = new backup_nested_element('automatic_badges_setting', ['id'], [
             'setting_name', 'setting_value',
         ]);
 
-        // --- 4. Award history log (user data) ---
+        // 4. Award history log (user data).
         $logentries = new backup_nested_element('automatic_badges_log_entries');
         $logentry   = new backup_nested_element('automatic_badges_log_entry', ['id'], [
             'userid', 'badgeid', 'ruleid',
             'timeissued', 'bonus_applied', 'bonus_value',
         ]);
 
-        // --- 5. Legacy criteria ---
+        // 5. Legacy criteria.
         $criteria  = new backup_nested_element('automatic_badges_criteria_entries');
         $criterion = new backup_nested_element('automatic_badges_criteria_entry', ['id'], [
             'badgeid', 'grademin', 'enabled', 'timecreated', 'timemodified',

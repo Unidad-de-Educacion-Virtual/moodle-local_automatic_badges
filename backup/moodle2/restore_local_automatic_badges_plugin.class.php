@@ -28,8 +28,6 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Restore plugin class for local_automatic_badges.
  *
@@ -37,11 +35,6 @@ defined('MOODLE_INTERNAL') || die();
  * responsible for remapping foreign-key IDs and inserting / updating the row.
  */
 class restore_local_automatic_badges_plugin extends restore_local_plugin {
-
-    // -------------------------------------------------------------------------
-    // Path registration
-    // -------------------------------------------------------------------------
-
     /**
      * Returns the restore path elements for this plugin at the course level.
      *
@@ -83,10 +76,6 @@ class restore_local_automatic_badges_plugin extends restore_local_plugin {
 
         return $paths;
     }
-
-    // -------------------------------------------------------------------------
-    // Process methods
-    // -------------------------------------------------------------------------
 
     /**
      * Restores the course enable/disable configuration record.
@@ -138,10 +127,10 @@ class restore_local_automatic_badges_plugin extends restore_local_plugin {
         $data  = (object) $data;
         $oldid = $data->id;
 
-        // --- Remap course ---
+        // Remap course.
         $data->courseid = $this->get_task()->get_courseid();
 
-        // --- Remap badge ---
+        // Remap badge.
         $newbadgeid = $this->get_mappingid('badge', $data->badgeid);
         if (!$newbadgeid) {
             // Badge not restored — skip this rule to avoid a broken reference.
@@ -149,29 +138,35 @@ class restore_local_automatic_badges_plugin extends restore_local_plugin {
         }
         $data->badgeid = $newbadgeid;
 
-        // --- Remap activity (course module) ---
+        // Remap activity (course module).
         if (!empty($data->activityid)) {
             $data->activityid = $this->get_mappingid(
-                'course_module', $data->activityid, null
+                'course_module',
+                $data->activityid,
+                null
             );
         }
 
-        // --- Remap bonus target activity ---
+        // Remap bonus target activity.
         if (!empty($data->bonus_target_activityid)) {
             $data->bonus_target_activityid = $this->get_mappingid(
-                'course_module', $data->bonus_target_activityid, null
+                'course_module',
+                $data->bonus_target_activityid,
+                null
             );
         }
 
-        // --- Remap section ---
+        // Remap section.
         if (!empty($data->section_id)) {
             $data->section_id = $this->get_mappingid(
-                'course_section', $data->section_id, null
+                'course_section',
+                $data->section_id,
+                null
             );
         }
 
-        // --- Timestamps ---
-        $data->timecreated  = $data->timecreated  ?? time();
+        // Timestamps.
+        $data->timecreated = $data->timecreated ?? time();
         $data->timemodified = time();
 
         unset($data->id);
@@ -211,10 +206,10 @@ class restore_local_automatic_badges_plugin extends restore_local_plugin {
         $data  = (object) $data;
         $oldid = $data->id;
 
-        // --- Remap course ---
+        // Remap course.
         $data->courseid = $this->get_task()->get_courseid();
 
-        // --- Remap user ---
+        // Remap user.
         $newuserid = $this->get_mappingid('user', $data->userid);
         if (!$newuserid) {
             // User not in restore archive — skip this log entry.
@@ -222,17 +217,19 @@ class restore_local_automatic_badges_plugin extends restore_local_plugin {
         }
         $data->userid = $newuserid;
 
-        // --- Remap badge ---
+        // Remap badge.
         $newbadgeid = $this->get_mappingid('badge', $data->badgeid);
         if (!$newbadgeid) {
             return;
         }
         $data->badgeid = $newbadgeid;
 
-        // --- Remap rule (use our own mapping set during rule processing) ---
+        // Remap rule using the mapping stored during rule processing.
         if (!empty($data->ruleid)) {
             $data->ruleid = $this->get_mappingid(
-                $this->get_namefor('rule'), $data->ruleid, $data->ruleid
+                $this->get_namefor('rule'),
+                $data->ruleid,
+                $data->ruleid
             );
         }
 
@@ -254,23 +251,22 @@ class restore_local_automatic_badges_plugin extends restore_local_plugin {
         $data  = (object) $data;
         $oldid = $data->id;
 
-        // --- Remap course ---
+        // Remap course.
         $data->courseid = $this->get_task()->get_courseid();
 
-        // --- Remap badge ---
+        // Remap badge.
         $newbadgeid = $this->get_mappingid('badge', $data->badgeid);
         if (!$newbadgeid) {
             return;
         }
         $data->badgeid = $newbadgeid;
 
-        // --- Timestamps ---
-        $data->timecreated  = $data->timecreated  ?? time();
+        // Timestamps.
+        $data->timecreated = $data->timecreated ?? time();
         $data->timemodified = $data->timemodified ?? time();
 
         unset($data->id);
         $newid = $DB->insert_record('local_automatic_badges_criteria', $data);
         $this->set_mapping($this->get_namefor('criteria_entry'), $oldid, $newid);
     }
-
 }

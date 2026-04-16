@@ -68,14 +68,18 @@ $ruleids  = array_unique(array_column((array)$logs, 'ruleid'));
 
 $usersmap  = $DB->get_records_list('user', 'id', $userids, '', 'id, firstname, lastname, email');
 $badgesmap = $DB->get_records_list('badge', 'id', $badgeids, '', 'id, name');
-$rulesmap  = $DB->get_records_list(
-    'local_automatic_badges_rules', 'id', $ruleids, '', 'id, criterion_type'
+$rulesmap = $DB->get_records_list(
+    'local_automatic_badges_rules',
+    'id',
+    $ruleids,
+    '',
+    'id, criterion_type'
 );
 
 foreach ($logs as $log) {
-    $user  = $usersmap[$log->userid]   ?? null;
+    $user  = $usersmap[$log->userid] ?? null;
     $badge = $badgesmap[$log->badgeid] ?? null;
-    $rule  = $rulesmap[$log->ruleid]   ?? null;
+    $rule  = $rulesmap[$log->ruleid] ?? null;
 
     $data[] = [
         $user ? fullname($user) : 'Unknown',
