@@ -152,6 +152,8 @@ class rule_engine {
      * @return bool
      */
     private static function check_global_forum_rule(\stdClass $rule, int $userid, array $cmids): bool {
+        global $DB;
+
         if (!isset($rule->forum_post_count) || empty($cmids)) {
             return false;
         }
@@ -160,13 +162,47 @@ class rule_engine {
         $courseid = (int)$rule->courseid;
         $counttype = $rule->forum_count_type ?? 'all';
 
-        // Contar posts totales en todos los foros del curso.
-        $totalposits = 0;
-        foreach ($cmids as $cmid) {
-            $postcount = self::get_forum_reply_count($courseid, $cmid, $userid, $counttype);
-            $totalposits += $postcount;
+        // Resolve all forum cmids to forum instance IDs in a single query.
+        [$insql, $inparams] = $DB->get_in_or_equal($cmids, SQL_PARAMS_NAMED, 'cmid');
+        $sql = "SELECT cm.instance
+                  FROM {course_modules} cm
+                  JOIN {modules} m ON m.id = cm.module
+                 WHERE cm.id {$insql}
+                   AND cm.course = :courseid
+                   AND m.name = 'forum'";
+        $inparams['courseid'] = $courseid;
+        $forumids = $DB->get_fieldset_sql($sql, $inparams);
+
+        if (empty($forumids)) {
+            return false;
         }
 
+        // Count all posts across all resolved forum IDs in a single query.
+        [$foruminsql, $foruminparams] = $DB->get_in_or_equal($forumids, SQL_PARAMS_NAMED, 'fid');
+
+        $parentcondition = '';
+        switch ($counttype) {
+            case 'replies':
+                $parentcondition = 'AND p.parent <> 0';
+                break;
+            case 'topics':
+                $parentcondition = 'AND p.parent = 0';
+                break;
+            default:
+                $parentcondition = '';
+                break;
+        }
+
+        $countsql = "SELECT COUNT(p.id)
+                       FROM {forum_posts} p
+                       JOIN {forum_discussions} d ON d.id = p.discussion
+                      WHERE d.forum {$foruminsql}
+                        AND p.userid = :userid
+                        {$parentcondition}
+                        AND p.deleted = 0";
+        $foruminparams['userid'] = $userid;
+
+        $totalposits = (int)$DB->count_records_sql($countsql, $foruminparams);
         return $totalposits >= $requiredposts;
     }
 
@@ -303,7 +339,6 @@ class rule_engine {
 
     /**
      * Evaluates rules based on the forum grade.
-     * Similar a check_grade_rule pero se aplica a actividades de tipo foro.
      *
      * @param \stdClass $rule
      * @param int $userid
@@ -339,7 +374,7 @@ class rule_engine {
      *
      * @param float $grade Student's grade.
      * @param string $operator Comparison operator (>=, >, <=, <, ==).
-     * @param float $threshold Valor de referencia.
+     * @param float $threshold Grade threshold to compare against.
      * @param float|null $grademax Maximum grade for range operator.
      * @return bool
      */

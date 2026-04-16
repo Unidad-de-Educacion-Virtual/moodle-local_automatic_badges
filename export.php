@@ -61,10 +61,21 @@ $headers = [
     get_string('history_bonus', 'local_automatic_badges'),
 ];
 
+// Bulk-load all related records to avoid N+1 queries.
+$userids  = array_unique(array_column((array)$logs, 'userid'));
+$badgeids = array_unique(array_column((array)$logs, 'badgeid'));
+$ruleids  = array_unique(array_column((array)$logs, 'ruleid'));
+
+$usersmap  = $DB->get_records_list('user', 'id', $userids, '', 'id, firstname, lastname, email');
+$badgesmap = $DB->get_records_list('badge', 'id', $badgeids, '', 'id, name');
+$rulesmap  = $DB->get_records_list(
+    'local_automatic_badges_rules', 'id', $ruleids, '', 'id, criterion_type'
+);
+
 foreach ($logs as $log) {
-    $user = $DB->get_record('user', ['id' => $log->userid], 'id, firstname, lastname, email');
-    $badge = $DB->get_record('badge', ['id' => $log->badgeid], 'id, name');
-    $rule = $DB->get_record('local_automatic_badges_rules', ['id' => $log->ruleid], 'id, criterion_type');
+    $user  = $usersmap[$log->userid]   ?? null;
+    $badge = $badgesmap[$log->badgeid] ?? null;
+    $rule  = $rulesmap[$log->ruleid]   ?? null;
 
     $data[] = [
         $user ? fullname($user) : 'Unknown',

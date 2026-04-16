@@ -25,21 +25,21 @@
  */
 // Local/automatic_badges/index.php.
 
-// Dependencias y capacidades.
+// Dependencies and capabilities.
 require(__DIR__ . '/../../config.php');
 require_login();
 
 $context = context_system::instance();
 require_capability('moodle/site:config', $context);
 
-// Configuracion de la pagina.
+// Page configuration.
 $PAGE->set_url(new moodle_url('/local/automatic_badges/index.php'));
 $PAGE->set_context($context);
 $PAGE->set_pagelayout('admin');
 $PAGE->set_title(get_string('pluginname', 'local_automatic_badges'));
 $PAGE->set_heading(get_string('pluginname', 'local_automatic_badges'));
 
-// Encabezado y accesos directos.
+// Header and shortcuts.
 echo $OUTPUT->header();
 echo $OUTPUT->single_button(
     new moodle_url('/local/automatic_badges/purge_cache.php'),
@@ -47,39 +47,48 @@ echo $OUTPUT->single_button(
     'post'
 );
 
-// Datos actuales de configuracion.
+// Pre-load all course config records keyed by courseid to avoid N+1 queries.
 global $DB;
-$current = $DB->get_records_menu('local_automatic_badges_coursecfg', null, '', 'courseid, enabled');
+$cfgrows = $DB->get_records('local_automatic_badges_coursecfg', null, '', 'id, courseid, enabled');
+$cfgrecs = [];
+foreach ($cfgrows as $row) {
+    $cfgrecs[$row->courseid] = $row;
+}
+$current = array_map(static fn($r) => (int)$r->enabled, $cfgrecs);
 $courses = get_courses();
 
-// Procesamiento del formulario.
+// Process form submission.
 if (optional_param('savecfg', 0, PARAM_BOOL) && confirm_sesskey()) {
     $enabledarr = optional_param_array('enabled', [], PARAM_BOOL);
 
     foreach ($courses as $course) {
         if ((int)$course->id === (int)SITEID) {
-            continue; // Omitir el curso del sitio.
+            continue; // Skip the site course.
         }
 
         $enabled = !empty($enabledarr[$course->id]) ? 1 : 0;
 
-        if (isset($current[$course->id])) {
-            $record = $DB->get_record('local_automatic_badges_coursecfg', ['courseid' => $course->id], '*', MUST_EXIST);
+        if (isset($cfgrecs[$course->id])) {
+            $record = clone $cfgrecs[$course->id];
             $record->enabled = $enabled;
             $DB->update_record('local_automatic_badges_coursecfg', $record);
         } else {
-            $record = (object)[
-                'courseid' => $course->id, 'enabled'  => $enabled,
-            ];
+            $record = (object)['courseid' => $course->id, 'enabled' => $enabled];
             $DB->insert_record('local_automatic_badges_coursecfg', $record);
         }
     }
 
-    $current = $DB->get_records_menu('local_automatic_badges_coursecfg', null, '', 'courseid, enabled');
+    // Refresh maps after save.
+    $cfgrows = $DB->get_records('local_automatic_badges_coursecfg', null, '', 'id, courseid, enabled');
+    $cfgrecs = [];
+    foreach ($cfgrows as $row) {
+        $cfgrecs[$row->courseid] = $row;
+    }
+    $current = array_map(static fn($r) => (int)$r->enabled, $cfgrecs);
     echo $OUTPUT->notification(get_string('configsaved', 'local_automatic_badges'), 'notifysuccess');
 }
 
-// Construccion del formulario.
+// Build the form.
 echo html_writer::start_tag('form', [
     'method' => 'post', 'action' => (new moodle_url('/local/automatic_badges/index.php'))->out(false),
 ]);
@@ -94,11 +103,11 @@ echo html_writer::tag('th', get_string('enabledcolumn', 'local_automatic_badges'
 echo html_writer::end_tag('tr');
 echo html_writer::end_tag('thead');
 
-// Listado de cursos.
+// Course list.
 echo html_writer::start_tag('tbody');
 foreach ($courses as $course) {
     if ((int)$course->id === (int)SITEID) {
-        continue; // No mostrar el curso del sitio.
+        continue; // Skip the site course.
     }
     $isenabled = !empty($current[$course->id]);
 
@@ -123,5 +132,5 @@ echo html_writer::empty_tag('input', [
 ]);
 echo html_writer::end_tag('form');
 
-// Cierre de la pagina.
+// Page footer.
 echo $OUTPUT->footer();
